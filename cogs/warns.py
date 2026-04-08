@@ -31,7 +31,7 @@ class Warns(commands.Cog):
             return
         message = ""
         for warning in warning_list:
-            warn = Warn.from_row(warning) # Turns warn list into class instances for better readability
+            warn = Warn(*warning) # Turns warn list into class instances for better readability
             message += f"_*Warn ID: {warn.warn_id}.*_ \n_*{warn.reason}*_ \nat {warn.date} \nBy {await self.bot.fetch_user(warn.moderator_id)}\n\n"
         embed = discord.Embed(title="Warning List", color=discord.Color.red())
         embed.set_thumbnail(url=user.display_avatar.url)
@@ -46,7 +46,7 @@ class Warns(commands.Cog):
         if result is None:
             await ctx.send("This warning does not exist. ")
             return
-        warn = Warn.from_row(result)
+        warn = Warn(*result)
         await self.bot.db.delete("warns", "warn_id", warn_id)
         await ctx.send(f"Warning ID:{warn.warn_id} for {warn.reason} deleted from {await self.bot.fetch_user(warn.user_id)}")
 

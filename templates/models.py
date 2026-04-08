@@ -7,10 +7,6 @@ class Snippet:
     author_id: int
     locked: bool
     
-    @classmethod
-    def from_row(cls, tuple_obj):
-        return cls(*tuple_obj)
-
 @dataclass
 class Warn:
     user_id: int
@@ -18,7 +14,3 @@ class Warn:
     moderator_id: int
     date: str
     warn_id: int
-
-    @classmethod
-    def from_row(cls, tuple_obj):
-        return cls(*tuple_obj)

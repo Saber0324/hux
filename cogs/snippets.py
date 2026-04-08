@@ -13,13 +13,13 @@ class Snippets(commands.Cog):
                 await ctx.send("Snippet not found. ")
                 return
         else:
-            snippet = Snippet.from_row(result) # Turns result into snippet.title/.description/.author/.lock
+            snippet = Snippet(*result) # Turns result into snippet.title/.description/.author/.lock
             return snippet
 
     def message_list_builder(self, results: list) -> str: # Doesn't use ctx because it doesn't take input directly from discord. 
         message = ""
         for result in results:
-            snippet = Snippet.from_row(result) 
+            snippet = Snippet(*result) 
             if snippet.locked:
                 message += f"— {snippet.title} :lock: \n\n" # Adds every title to the message. Planned to turn into a paginating embed later (fuck discord.py docs) 
             else:
