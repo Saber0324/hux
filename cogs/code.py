@@ -11,7 +11,7 @@ class Eval(commands.Cog):
         if code is None:
             await ctx.send("Correct usage: \n\`\`\`py \n<code here>\n\`\`\`")
         elif code.startswith("```py"):
-            docker_sub = subprocess.run(["docker", "run", "--rm", "python:3.12-slim", "python", "-c", f"'{code[6:-4]}'"], capture_output=True, text=True)
+            docker_sub = subprocess.run(["docker", "run", "--rm", "python:3.12-slim", "python", "-c", f"{code[6:-4]}"], capture_output=True, text=True)
             await ctx.send(docker_sub)
 
 
