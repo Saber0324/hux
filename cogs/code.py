@@ -20,6 +20,7 @@ class Eval(commands.Cog):
                     "--network" , "none",
                     "--rm",
                     "--memory=50m",
+                    "--memory-swap=50m"
                     "python:3.12-slim",
                     "python",
                     "-c",
