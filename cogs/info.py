@@ -22,23 +22,17 @@ class Info(commands.Cog):
 
     @info.command()
     async def user(self, ctx: commands.Context, user: discord.Member) -> None:
-        await ctx.send(
-        embed = await embeds.userEmbed(user)
-        )
+        await ctx.send(embed=await embeds.userEmbed(user))
 
     @info.command()
     async def server(self, ctx: commands.Context) -> None:
-        await ctx.send(
-        embed = await embeds.serverEmbed(ctx)
-        )
+        await ctx.send(embed=await embeds.serverEmbed(ctx))
 
     @info.group(invoke_without_command=True)
     async def role(self, ctx: commands.Context, target: discord.Role = None) -> None:
         if ctx.invoked_subcommand is None:
             if target:
-                await ctx.send(
-                embed = await embeds.roleEmbed(target)
-                    )
+                await ctx.send(embed=await embeds.roleEmbed(target))
             else:
                 await ctx.send(
                     content="Correct usage: \n`!info role @role` \n`!info role list` \n`!info role count (group)`"
@@ -46,7 +40,7 @@ class Info(commands.Cog):
 
     @role.command(name="list")
     async def role_list(self, ctx: commands.Context) -> None:
-        await ctx.send(embed = await embeds.roleListEmbed(ctx))
+        await ctx.send(embed=await embeds.roleListEmbed(ctx))
 
     @role.command()
     async def count(self, ctx: commands.Context, *, group: str = None) -> None:

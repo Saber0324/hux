@@ -23,7 +23,7 @@ class Database:
                             date TEXT DEFAULT CURRENT_TIMESTAMP,
                             warn_id INTEGER PRIMARY KEY)
                             """)
-                            
+
             await db.execute("""
                             CREATE TABLE IF NOT EXISTS projects (
                             user_id INTEGER,
