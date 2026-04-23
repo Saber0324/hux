@@ -15,8 +15,7 @@ class Eval(commands.Cog):
         elif code.startswith("```py"):
             docker_sub = subprocess.run(
                 [
-                    "docker",
-                    "run",
+                    "docker", "run",
                     "--network" , "none",
                     "--rm",
                     "--memory=50m",
@@ -24,13 +23,15 @@ class Eval(commands.Cog):
                     "python:3.12-slim",
                     "python",
                     "-c",
-                    f"{code[6:-4]}",
+                    f"{code[6:-3]}",
                 ],
                 capture_output=True,
                 text=True,
+                timeout=15
             )
+            output = docker_sub.stdout or docker_sub.stderr
             await ctx.send(
-                f"Return code: {docker_sub.returncode}. \n Output: ```{docker_sub.stdout or docker_sub.stderr}```"
+                f"Return code: {docker_sub.returncode}. \n Output: ```{output[:1900]}```"
             )
         else:
             await ctx.send("Please, use the proper formatting.")

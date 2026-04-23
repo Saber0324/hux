@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 import os
 import asyncio
+import subprocess
 from dotenv import load_dotenv
 from data.database import Database
 
@@ -45,6 +46,8 @@ async def on_command_error(ctx: commands.Context, error) -> None:
         await ctx.send("Command has a bad argument. Check all parameter are correct.")
     elif isinstance(error, commands.NotOwner):
         await ctx.send("Only Saber can access this command.")
+    elif isinstance(error, subprocess.TimeoutExpired):
+        await ctx.send("Subprocess timed out.")
     elif isinstance(error, commands.CommandNotFound):
         pass
 
