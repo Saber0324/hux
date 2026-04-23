@@ -7,6 +7,7 @@ class Eval(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases = ["e"])
+    @commands.is_owner()
     async def eval(self, ctx: commands.Context, *, code: str = None) -> None:
         if code is None:
             await ctx.send("Correct usage: \n\`\`\`py \n<code here>\n\`\`\`")
