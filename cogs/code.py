@@ -19,7 +19,7 @@ class Eval(commands.Cog):
                         "docker",
                         "run",
                         "--rm",
-                        "--memory='50m'",
+                        "--memory=50m",
                         "--network none",
                         "python:3.12-slim",
                         "python",
