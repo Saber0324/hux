@@ -25,6 +25,7 @@ class Eval(commands.Cog):
                     "--read-only",
                     "--tmpfs", "/tmp:size=5m",
                     "--user", "1000:1000",
+                    "--pids-limit", "50",
                     "python:3.12-slim",
                     "python",
                     "-c",
