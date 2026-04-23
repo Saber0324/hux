@@ -14,6 +14,8 @@ class Eval(commands.Cog):
         elif code.startswith("```py"):
             docker_sub = subprocess.run(["docker", "run", "--rm", "python:3.12-slim", "python", "-c", f"{code[6:-4]}"], capture_output=True, text=True)
             await ctx.send(f"Return code: {docker_sub.returncode}. \n Output: ```{docker_sub.stdout or docker_sub.stderr}```")
+        else:
+            await ctx.send("Please, use the proper formatting.")
 
 
 async def setup(bot) -> None:
