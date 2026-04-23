@@ -24,6 +24,7 @@ class Eval(commands.Cog):
                     "--security-opt", "no-new-privileges",
                     "--read-only",
                     "--tmpfs", "/tmp:size=5m",
+                    "--user", "1000:1000",
                     "python:3.12-slim",
                     "python",
                     "-c",
