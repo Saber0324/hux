@@ -18,9 +18,9 @@ class Eval(commands.Cog):
                     [
                         "docker",
                         "run",
+                        "--network none",
                         "--rm",
                         "--memory=50m",
-                        "--network none",
                         "python:3.12-slim",
                         "python",
                         "-c",
