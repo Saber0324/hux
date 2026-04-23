@@ -22,7 +22,8 @@ class Eval(commands.Cog):
                     "--memory-swap=50m",
                     "--cpus=0.5",
                     "--security-opt", "no-new-privileges",
-                    "--read-only"
+                    "--read-only",
+                    "--tmpfs /tmp:size=5m",
                     "python:3.12-slim",
                     "python",
                     "-c",
