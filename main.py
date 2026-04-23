@@ -59,6 +59,7 @@ async def main() -> None:
             "cogs.projects",
             "cogs.snippets",
             "cogs.warns",
+            "cogs.code"
         ]:
             await bot.load_extension(cogs)
         await bot.start(token)

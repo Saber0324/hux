@@ -46,7 +46,7 @@ class Info(commands.Cog):
 
     @role.command(name="list")
     async def role_list(self, ctx: commands.Context) -> None:
-        await ctx.send(embed = await embeds.roleListEmbed())
+        await ctx.send(embed = await embeds.roleListEmbed(ctx))
 
     @role.command()
     async def count(self, ctx: commands.Context, *, group: str = None) -> None:
