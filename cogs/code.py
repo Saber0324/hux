@@ -23,7 +23,7 @@ class Eval(commands.Cog):
                     "--cpus=0.5",
                     "--security-opt", "no-new-privileges",
                     "--read-only",
-                    "--tmpfs /tmp:size=5m",
+                    "--tmpfs", "/tmp:size=5m",
                     "python:3.12-slim",
                     "python",
                     "-c",
