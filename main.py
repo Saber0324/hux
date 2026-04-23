@@ -48,6 +48,8 @@ async def on_command_error(ctx: commands.Context, error) -> None:
         await ctx.send("Only Saber can access this command.")
     elif isinstance(error, subprocess.TimeoutExpired):
         await ctx.send("Subprocess timed out.")
+    elif isinstance(error, commands.CommandOnCooldown):
+        await ctx.send("The command is still in cooldown.")
     elif isinstance(error, commands.CommandNotFound):
         pass
 
