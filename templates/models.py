@@ -1,15 +1,13 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Snippet:
     title: str
     description: str
     author_id: int
-    lock: bool
-    
-    @classmethod
-    def from_row(cls, tuple_obj):
-        return cls(*tuple_obj)
+    locked: bool
+
 
 @dataclass
 class Warn:
@@ -18,7 +16,3 @@ class Warn:
     moderator_id: int
     date: str
     warn_id: int
-
-    @classmethod
-    def from_row(cls, tuple_obj):
-        return cls(*tuple_obj)

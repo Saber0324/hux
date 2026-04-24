@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 import os
 import asyncio
+import subprocess
 from dotenv import load_dotenv
 from data.database import Database
 
@@ -16,15 +17,17 @@ intents.moderation = True
 
 handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 token = str(os.getenv("TOKEN"))
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"), intents=intents)
+
 
 @bot.event
 async def on_ready() -> None:
     print(f"{bot.user} is ready and online!")
     await bot.tree.sync()
+
 
 @bot.event
 async def on_command_error(ctx: commands.Context, error) -> None:
@@ -41,16 +44,32 @@ async def on_command_error(ctx: commands.Context, error) -> None:
         await ctx.send("I don't have permission to do that.")
     elif isinstance(error, commands.BadArgument):
         await ctx.send("Command has a bad argument. Check all parameter are correct.")
+    elif isinstance(error, commands.NotOwner):
+        await ctx.send("Only Saber can access this command.")
+    elif isinstance(error, subprocess.TimeoutExpired):
+        await ctx.send("Subprocess timed out.")
+    elif isinstance(error, commands.CommandOnCooldown):
+        await ctx.send("The command is still in cooldown.")
     elif isinstance(error, commands.CommandNotFound):
         pass
+
 
 async def main() -> None:
     discord.utils.setup_logging(handler=handler, level=logging.DEBUG)
     async with bot:
         bot.db = Database("data/bot.db")
         await bot.db.setup()
-        for cogs in ["cogs.info", "cogs.moderation", "cogs.fun", "cogs.projects", "cogs.snippets", "cogs.warns"]:
+        for cogs in [
+            "cogs.info",
+            "cogs.moderation",
+            "cogs.fun",
+            "cogs.projects",
+            "cogs.snippets",
+            "cogs.warns",
+            "cogs.code",
+        ]:
             await bot.load_extension(cogs)
         await bot.start(token)
+
 
 asyncio.run(main())

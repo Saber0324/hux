@@ -24,6 +24,7 @@ HuxBot is a custom Discord bot built for the Hog Projects server. It handles mod
 ### 🛡️ Moderation
 - Kick, timeout and untimeout members
 - Role management (`add` / `remove`)
+- Warning system
 
 ### ℹ️ Info
 - Server, user and role information via `!info`
@@ -100,6 +101,9 @@ python main.py
 | `!untimeout @user` | Remove timeout |
 | `!role add @user role` | Add a role |
 | `!role remove @user role` | Remove a role |
+| `!warn @user`| Warns an user |
+| `!warn list @user` | Displays all warns from an user|
+| `!warn delete <warn id>` | Deletes a warn |
 
 ### Projects
 | Command | Description |
@@ -126,6 +130,8 @@ python main.py
 ```
 projects-bot/
 ├── main.py
+├── templates
+│   └── models.py
 ├── data/
 │   ├── database.py
 │   └── bot.db

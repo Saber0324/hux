@@ -1,5 +1,6 @@
 from discord.ext import commands
 
+
 class Projects(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -8,12 +9,12 @@ class Projects(commands.Cog):
         self.projects = {
             "lufus": {
                 "repo": "<https://github.com/Hog185/Lufus>",
-                "release": "<https://github.com/Hog185/Lufus/releases/latest>"
+                "release": "<https://github.com/Hog185/Lufus/releases/latest>",
             },
             "hux-bot": {
                 "repo": "<https://github.com/Saber0324/projects-bot>",
-                "release": "<https://github.com/Saber0324/projects-bot/releases/latest>"
-            }
+                "release": "<https://github.com/Saber0324/projects-bot/releases/latest>",
+            },
         }
 
     # base command: !projects
