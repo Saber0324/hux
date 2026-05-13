@@ -15,7 +15,7 @@ class Eval(commands.Cog):
         if code is None:
             await ctx.send(
                 "Correct usage: \n\n"
-                + "```py/go"
+                + r"\`\`\`py/go"
                 + "\n"
                 + "<code here>"
                 + "\n"
