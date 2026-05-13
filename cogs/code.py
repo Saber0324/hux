@@ -39,8 +39,8 @@ class Eval(commands.Cog):
         output = docker_sub.stdout
         if docker_sub.stderr:
             output += f"\nstderr: {docker_sub.stderr}"
-        if len(output) >= 500:
-            output = f"{output[:500]} \n\nOutput limited to 100 characters."
+        if len(output) >= 100:
+            output = f"{output[:100]} \n\nOutput limited to 100 characters."
         else:
             output = output or "(No output)"
         await ctx.send(
