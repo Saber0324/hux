@@ -13,7 +13,9 @@ class Eval(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def eval(self, ctx: commands.Context, *, code: str | None = None) -> None:
         if code is None:
-            await ctx.send("Correct usage: \n``````py/go \n<code here>\n``````")
+            await ctx.send(
+                "Correct usage: \n" + r"\`\`\`py/go <code here>" + "\n" + r"\`\`\`"
+            )
             return
         elif code.startswith("```py"):
             loop = asyncio.get_event_loop()
@@ -102,7 +104,8 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "sandbox-go",
             "timeout",
             "30",
-            "/bin/sh-c",
+            "/bin/sh",
+            "-c",
             f"echo -e '{code[6:-3]}' >| /tmp/code.go && go run /tmp/code.go",
         ],
         capture_output=True,
