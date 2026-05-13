@@ -14,7 +14,12 @@ class Eval(commands.Cog):
     async def eval(self, ctx: commands.Context, *, code: str | None = None) -> None:
         if code is None:
             await ctx.send(
-                "Correct usage: \n" + r"\`\`\`py/go <code here>" + "\n" + r"\`\`\`"
+                "Correct usage: \n\n"
+                + "```py/go"
+                + "\n"
+                + "<code here>"
+                + "\n"
+                + r"\`\`\`"
             )
             return
         elif code.startswith("```py"):
