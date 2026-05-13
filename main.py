@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 import logging
 import os
@@ -26,7 +27,11 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"), intents=inten
 @bot.event
 async def on_ready() -> None:
     print(f"{bot.user} is ready and online!")
-    await bot.tree.sync()
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} commands.")
+    except Exception as e:
+        print(e)
 
 
 @bot.event
@@ -66,7 +71,8 @@ async def main() -> None:
             "cogs.projects",
             "cogs.snippets",
             "cogs.warns",
-            "cogs.code",
+            "cogs.testing",
+            # "cogs.code",
         ]:
             await bot.load_extension(cogs)
         await bot.start(token)

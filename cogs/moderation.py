@@ -1,6 +1,8 @@
 import discord
-import datetime
+from discord import app_commands
 from discord.ext import commands
+import datetime
+from templates.models import parse_time
 
 
 class Moderation(commands.Cog):
@@ -9,8 +11,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick(
-        self,
+    async def kick(self,
         ctx: commands.Context,
         user: discord.Member,
         *,
@@ -19,18 +20,22 @@ class Moderation(commands.Cog):
         await user.kick(reason=reason)
         await ctx.send(f"{user.name} has been kicked. \nReason: {reason}")
 
-    @commands.command()
-    @commands.has_permissions(moderate_members=True)
-    async def timeout(
-        self,
-        ctx: commands.Context,
+    @app_commands.command(
+                            name="selftimeout", 
+                            description="times out an user for a determined period of time.")
+    @app_commands.describe(
+                            duration="The amount of time the user will be timed out.",
+                            reason="The reason for this user's time out"
+                            )
+    @app_commands.checks.has_permissions(moderate_members=True)
+    async def selftimeout(self,
+        interaction: discord.Interaction,
         user: discord.Member,
-        duration: int,
-        *,
-        reason: str = "No reason provided.",
-    ) -> None:
-        await user.timeout(datetime.timedelta(minutes=duration), reason=reason)
-        await ctx.send(
+        duration: str, 
+        *, 
+        reason: str = "No reason provided.") -> None:
+        await user.timeout(datetime.timedelta(**parse_time(duration)), reason=reason)
+        await interaction.response.send_message(
             f"{user.name} has been timed out for {duration} minutes. \nReason: {reason}"
         )
 
