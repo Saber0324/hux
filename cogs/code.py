@@ -97,7 +97,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "--security-opt",
             "no-new-privileges",
             "--tmpfs",
-            "/tmp:size=50m",
+            "/tmp:size=50m,exec",
             "--tmpfs",
             "/dev/shm:size=10m,noexec,nosuid",
             "--user",
