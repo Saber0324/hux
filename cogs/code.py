@@ -100,15 +100,13 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "--cap-drop",
             "all",
             "sandbox-go",
-            "echo",
-            "-e",
-            "/bin/sh",
-            "-c",
+            "timeout",
+            "30/bin/sh-c",
             f"echo -e '{code[6:-3]}' >| /tmp/code.go && go run /tmp/code.go",
         ],
         capture_output=True,
         text=True,
-        timeout=20,
+        timeout=35,
     )
 
 
