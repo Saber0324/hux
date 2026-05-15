@@ -44,7 +44,7 @@ class Eval(commands.Cog):
         else:
             output = output or "(No output)"
         await ctx.send(
-            f"Your code returned with code: {docker_sub.returncode}. ```{output}```",
+            f"Your code returned with code: {docker_sub.returncode}. ```\n{output}\n```",
             allowed_mentions=discord.AllowedMentions.none(),
         )
 
