@@ -121,7 +121,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "30",
             "/bin/sh",
             "-c",
-            "'cat > /tmp/code.go && go run /tmp/code.go'",
+            "cat > /tmp/code.go && go run /tmp/code.go",
         ],
         input=code[6:-3],
         capture_output=True,
