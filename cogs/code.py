@@ -116,7 +116,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "-e",
             "GOPATH=/tmp/gopath",
             "-i",
-            "golang:latest",
+            "golang:alpine",
             "timeout",
             "30",
             "/bin/sh",
