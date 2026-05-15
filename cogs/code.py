@@ -118,7 +118,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "-i",
             "golang:alpine",
             "timeout",
-            "30",
+            "45",
             "/bin/sh",
             "-c",
             "cat > /tmp/code.go && go run /tmp/code.go",
@@ -126,7 +126,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
         input=code[6:-3],
         capture_output=True,
         text=True,
-        timeout=35,
+        timeout=50,
     )
 
 
