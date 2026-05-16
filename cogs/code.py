@@ -3,6 +3,7 @@ from discord.ext import commands
 import subprocess
 import asyncio
 import functools
+from time import time as currenttime
 
 
 class Eval(commands.Cog):
@@ -15,11 +16,11 @@ class Eval(commands.Cog):
         if code is None:
             await ctx.send(
                 "Correct usage: \n\n"
-                + r"\`\`\`py/go"
+                + r"\`\`\`py/go/bf"
                 + "\n"
                 + "<code here>"
                 + "\n"
-                + r"\`\`\`"
+                + r"\`\`\` [stdin if brainf**k]"
             )
             return
         elif code.startswith("```py"):
@@ -32,6 +33,15 @@ class Eval(commands.Cog):
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_go, code)
             )
+        elif code.startswith("```bf"):
+            bfinput = code[code.find("\n```")+4:]
+            if bfinput.startswith(" "):
+                bfinput = bfinput[1:]
+            if bfinput == code[3:]:
+                bfinput = ""
+            loop = asyncio.get_event_loop()
+            docker_sub = await loop.run_in_executor(
+                None, functools.partial(run_bf, code, bfinput))
         else:
             await ctx.send("Please, use the proper formatting.")
             return
@@ -129,6 +139,69 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
         timeout=50,
     )
 
+def run_bf(code: str, bfinput: str) -> subprocess.CompletedProcess[str]:
+    starttime = currenttime()
+    cells = bytearray(30000) # Memory (30kb)
+    bfinput += "\0" # Add a null character to the end of the input
+    inputptr = 0 # Pointer that points to a character in the input 
+    dp = 0 # Data pointer
+    
+    stack = [] # Bracket nest stack
+    jump = [None]*len(code) # Jump table
+    ip = 0 # Instruction pointer
+    output = "" # Output
+    status = subprocess.CompletedProcess(bfinput, 0, "", "")
+
+    if code.count("[") != code.count("]"):
+        status.stderr = "Brackets are unbalanced"
+        status.returncode = 1
+
+    # totally not taken from https://stackoverflow.com/a/3041005
+    if status.returncode == 0:
+        for i,o in enumerate(code):
+            if o=='[':
+                stack.append(i)
+            elif o==']':
+                if len(stack) == 0:
+                    status.stderr = "Brackets are unbalanced"
+                    status.returncode = 1
+                    break
+                else:
+                    jump[i] = stack.pop()
+                jump[jump[i]] = i
+
+    while ip < len(code) and status.returncode == 0:
+        match code[ip]:
+            case "+":
+                cells[dp] = (cells[dp] + 1) % 256
+            case "-":
+                cells[dp] = (cells[dp] - 1) % 256
+            case ">":
+                dp+=1
+                if dp < -1 or dp > 29999:
+                    dp -= 30000
+            case "<":
+                dp-=1
+                if dp < -1 or dp > 29999:
+                    dp += 30000
+            case ".":
+                output += chr(cells[dp])
+            case ",":
+                cells[dp] = ord(bfinput[inputptr])
+                inputptr += 1
+            case "[":
+                if not cells[dp]:
+                    ip = jump[ip]
+            case "]":
+                if cells[dp]:
+                    ip = jump[ip]
+                    continue
+        ip+=1
+        if currenttime() - starttime > 30:
+            status.returncode = 124
+            break
+    status.stdout = output
+    return status
 
 async def setup(bot) -> None:
     await bot.add_cog(Eval(bot))
