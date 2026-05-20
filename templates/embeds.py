@@ -56,3 +56,42 @@ async def roleListEmbed(ctx: commands.Context) -> discord.Embed:
         inline=False,
     )
     return embed
+
+
+def correctUsageEmbed(language: str) -> discord.Embed:
+    embed = discord.Embed(
+        title=f"{language} correct usage", color=discord.Color.green()
+    )
+    if language == "Python":
+        embed.add_field(
+            name="\u200b",
+            value=r"\`\`\`py" + "\ncode here \n" + r"\`\`\`",
+            inline=False,
+        )
+        embed.add_field(name="Example", value='```py \nprint("Hello, World!") \n```')
+
+    if language == "Python":
+        embed.add_field(
+            name="\u200b",
+            value=r"\`\`\`go" + "\npackage main \ncode here \n" + r"\`\`\`",
+            inline=False,
+        )
+        embed.add_field(
+            name="Example",
+            value="```go \npackage main \n import 'fmt' \n func main() {\n  fmt.Println('Hello, World!') \n```",
+            inline=False,
+        )
+
+    elif language == "Brainfuck":
+        embed.add_field(
+            name="\u200b",
+            value=r"\`\`\`bf" + "\ncode here \n" + r"\`\`\`",
+            inline=False,
+        )
+        embed.add_field(
+            name="Example",
+            value="```bf \n++++++++++++[>+++++++++<-]>.---.--.++++++.------------.>++++++++[>++++<-]>.<<+.-.+++++++++++..+++++++. \n```",
+            inline=False,
+        )
+
+    return embed

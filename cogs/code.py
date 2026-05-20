@@ -6,6 +6,7 @@ import functools
 
 from typing import TYPE_CHECKING
 
+from templates.embeds import correctUsageEmbed
 from templates.view import BaseView, CorrectUsageMenu
 
 if TYPE_CHECKING:
@@ -68,7 +69,9 @@ class Eval(commands.Cog):
 
         if code is None:
             view = CorrectUsageMenu(ctx.author)
-            view.message = await ctx.send("Correct usage:", view=view)
+            view.message = await ctx.send(
+                embed=correctUsageEmbed(view.select.values[0]), view=view
+            )
             return
 
         output, return_code = await self.eval_logic(code)
