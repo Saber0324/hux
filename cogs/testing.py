@@ -39,8 +39,8 @@ class Testing(commands.Cog):
             label="Error me out!", style=discord.ButtonStyle.blurple
         )
 
-        async def callback(interaction: discord.Interaction):
-            raise Exception(f"{interaction.user} errored me out, what a twat.")
+        async def callback(inter: discord.Interaction):
+            raise Exception(f"{inter.user} errored me out, what a twat.")
 
         button.callback = callback
         view.add_item(button)
