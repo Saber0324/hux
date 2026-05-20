@@ -69,9 +69,7 @@ class Eval(commands.Cog):
 
         if code is None:
             view = CorrectUsageMenu(ctx.author)
-            view.message = await ctx.send(
-                embed=correctUsageEmbed(view.select.values[0]), view=view
-            )
+            view.message = await ctx.send(view=view)
             return
 
         output, return_code = await self.eval_logic(code)
