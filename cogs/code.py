@@ -68,7 +68,7 @@ class Eval(commands.Cog):
             allowed_mentions=discord.AllowedMentions.none(),
             view=view,
         )
-        await ctx.message.add_reaction("<:repeat:7905>")
+        await ctx.message.add_reaction("\U0001f501")
 
 
 def run_python(code: str) -> subprocess.CompletedProcess[str]:
