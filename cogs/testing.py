@@ -35,14 +35,16 @@ class Testing(commands.Cog):
     )
     async def viewerror(self, interaction: discord.Interaction) -> None:
         view = BaseView(interaction.user, timeout=10.0)
-        view.add_item(
-            discord.ui.Button(label="Error me out!", style=discord.ButtonStyle.blurple)
+        button = discord.ui.Button(
+            label="Error me out!", style=discord.ButtonStyle.blurple
         )
 
         async def callback(interaction: discord.Interaction):
             raise Exception(f"{interaction.user} errored me out, what a twat.")
 
-        view.children[0].callback = callback
+        button.callback = callback
+        view.add_item(button)
+
         await interaction.response.send_message("Click me for an error.", view=view)
         view.message = await interaction.original_response()
 
