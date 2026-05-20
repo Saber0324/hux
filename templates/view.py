@@ -1,5 +1,6 @@
 import traceback
 from typing import Self
+from asyncio.base_events import _interleave_addrinfos
 import discord
 from discord.ui.select import BaseSelect
 
@@ -55,3 +56,22 @@ class BaseView(discord.ui.View):
     async def on_timeout(self) -> None:
         self._disable_all()
         await self._edit(view=self)
+
+
+class CorrectUsageMenu(BaseView):
+    LANGS = ["Python", "Go", "Brainfuck"]
+
+    @discord.ui.select(
+        cls=discord.ui.Select,
+        options=[discord.SelectOption(label=lang) for lang in LANGS],
+        placeholder="Select a language.",
+        min_values=1,
+        max_values=1,
+    )
+    async def select(
+        self, interaction: discord.Interaction, select: discord.ui.Select[Self]
+    ) -> None:
+        await interaction.response.defer()
+        await interaction.followup.send(
+            f"The correct usage for the language {select.values[0]} is:"
+        )

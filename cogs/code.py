@@ -6,7 +6,7 @@ import functools
 
 from typing import TYPE_CHECKING
 
-from templates.view import BaseView
+from templates.view import BaseView, CorrectUsageMenu
 
 if TYPE_CHECKING:
     from main import Hux
@@ -67,14 +67,8 @@ class Eval(commands.Cog):
         view.add_item(delete_button)
 
         if code is None:
-            await ctx.send(
-                "Correct usage: \n\n"
-                + r"\`\`\`py/go"
-                + "\n"
-                + "<code here>"
-                + "\n"
-                + r"\`\`\`"
-            )
+            view = CorrectUsageMenu(ctx.author)
+            view.message = await ctx.send("Correct usage:", view=view)
             return
 
         output, return_code = await self.eval_logic(code)
