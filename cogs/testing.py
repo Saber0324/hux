@@ -21,7 +21,7 @@ class Testing(commands.Cog):
 
     @app_commands.command(name="viewtest", description="View testing.")
     async def viewtest(self, interaction: discord.Interaction) -> None:
-        view = BaseView(interaction.user)
+        view = BaseView(interaction.user, timeout=10.0)
         view.add_item(
             discord.ui.Button(label="Testing", style=discord.ButtonStyle.blurple)
         )
