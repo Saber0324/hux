@@ -1,4 +1,3 @@
-from asyncio import timeout
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -45,8 +44,8 @@ class Testing(commands.Cog):
 
         view.children[0].callback = callback
         await interaction.response.send_message("Click me for an error.", view=view)
+        view.message = await interaction.original_response()
 
 
 async def setup(bot: Hux):
     await bot.add_cog(Testing(bot))
-
