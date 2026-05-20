@@ -1,4 +1,3 @@
-from types import _ReturnT_co
 import discord
 from discord.ext import commands
 import subprocess
@@ -45,6 +44,13 @@ class Eval(commands.Cog):
 
         return output, return_code
 
+    def _format_output(self, output: str, return_code: int) -> str:
+        if return_code == 0:
+            return f"Your eval was succesful. \n```\n{output}\n```"
+        return (
+            f"Your eval returned with error code: {return_code}. \n```\n{output}\n```"
+        )
+
     @commands.command(aliases=["e"])
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def eval(self, ctx: commands.Context, *, code: str | None = None) -> None:
@@ -73,12 +79,7 @@ class Eval(commands.Cog):
 
         output, return_code = await self.eval_logic(code)
 
-        if return_code == 0:
-            message = f"Your eval was succesful. \n```\n{output}\n```"
-        else:
-            message = (
-                f"Your eval returned with error code {return_code} \n```\n{output}\n```"
-            )
+        message = self._format_output(output=output, return_code=return_code)
 
         bot_message = await ctx.send(
             message,
@@ -117,10 +118,7 @@ class Eval(commands.Cog):
         output, return_code = await self.eval_logic(code)
 
         if old_response:
-            if return_code == 0:
-                message = f"Your eval was succesful. \n```\n{output}\n```"
-            else:
-                message = f"Your eval returned with error code {return_code} \n```\n{output}\n```"
+            message = self._format_output(output=output, return_code=return_code)
 
             await old_response.edit(
                 content=message, allowed_mentions=discord.AllowedMentions.none()
