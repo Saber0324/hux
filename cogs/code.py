@@ -6,7 +6,6 @@ import functools
 
 from typing import TYPE_CHECKING
 
-from templates.embeds import correctUsageEmbed
 from templates.view import BaseView, CorrectUsageMenu
 
 if TYPE_CHECKING:
