@@ -16,10 +16,34 @@ class Eval(commands.Cog):
     def __init__(self, bot: Hux):
         self.bot = bot
 
+    async def eval_logic(self, code: str) -> tuple[str, int]:
+        if code.startswith("```py"):
+            loop = asyncio.get_event_loop()
+            docker_sub = await loop.run_in_executor(
+                None, functools.partial(run_python, code)
+            )
+        elif code.startswith("```go"):
+            loop = asyncio.get_event_loop()
+            docker_sub = await loop.run_in_executor(
+                None, functools.partial(run_go, code)
+            )
+        else:
+            return "Please, use proper formatting", 1
+
+        output = docker_sub.stdout
+        return_code = docker_sub.returncode
+        if docker_sub.stderr:
+            output += f"\nstderr: {docker_sub.stderr}"
+        if len(output) >= 500:
+            output = f"{output[:500]} \n\nOutput limited to 500 characters."
+        else:
+            output = output or "(No output)"
+        return output, return_code
+
     @commands.command(aliases=["e"])
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def eval(self, ctx: commands.Context, *, code: str | None = None) -> None:
-        view = BaseView(ctx.author)
+        view = BaseView(ctx.author, timeout=30.0)
         delete_button = discord.ui.Button(
             label="Delete", style=discord.ButtonStyle.danger
         )
@@ -41,28 +65,6 @@ class Eval(commands.Cog):
                 + r"\`\`\`"
             )
             return
-        elif code.startswith("```py"):
-            loop = asyncio.get_event_loop()
-            docker_sub = await loop.run_in_executor(
-                None, functools.partial(run_python, code)
-            )
-        elif code.startswith("```go"):
-            loop = asyncio.get_event_loop()
-            docker_sub = await loop.run_in_executor(
-                None, functools.partial(run_go, code)
-            )
-        else:
-            await ctx.send("Please, use the proper formatting.")
-            return
-
-        output = docker_sub.stdout
-        if docker_sub.stderr:
-            output += f"\nstderr: {docker_sub.stderr}"
-        if len(output) >= 500:
-            output = f"{output[:500]} \n\nOutput limited to 500 characters."
-        else:
-            output = output or "(No output)"
-
         bot_message = await ctx.send(
             f"Your code returned with code: {docker_sub.returncode}. ```{output}```",
             allowed_mentions=discord.AllowedMentions.none(),
