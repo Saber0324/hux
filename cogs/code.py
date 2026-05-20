@@ -86,6 +86,7 @@ class Eval(commands.Cog):
             allowed_mentions=discord.AllowedMentions.none(),
             view=view,
         )
+        view.message = bot_message
 
     @commands.Cog.listener()
     async def on_message_edit(
