@@ -1,3 +1,4 @@
+from asyncio import timeout
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -29,6 +30,21 @@ class Testing(commands.Cog):
             "This is supposed to be a view!", view=view
         )
         view.message = await interaction.original_response()
+
+    @app_commands.command(
+        name="viewerror", description="Testing error display on the BaseView"
+    )
+    async def viewerror(self, interaction: discord.Interaction) -> None:
+        view = BaseView(interaction.user, timeout=10.0)
+        view.add_item(
+            discord.ui.Button(label="Error me out!", style=discord.ButtonStyle.blurple)
+        )
+
+        async def callback(interaction: discord.Interaction):
+            raise Exception(f"{interaction.user} errored me out, what a twat.")
+
+        view.children[0].callback = callback
+        await interaction.response.send_message("Click me for an error.", view=view)
 
 
 async def setup(bot: Hux):
