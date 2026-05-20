@@ -78,7 +78,7 @@ def correctUsageEmbed(language: str) -> discord.Embed:
         )
         embed.add_field(
             name="Example",
-            value="```go\npackage main \n import 'fmt' \n func main() {\n  fmt.Println('Hello, World!') \n```",
+            value="```go\npackage main \n\nimport 'fmt' \n\nfunc main() {\n  fmt.Println('Hello, World!') \n\n} \n```",
             inline=False,
         )
 
