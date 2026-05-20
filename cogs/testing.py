@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from typing import TYPE_CHECKING
 
-from templates.base_view import BaseView
+from templates.view import BaseView
 
 if TYPE_CHECKING:
     from main import Hux
