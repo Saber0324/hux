@@ -69,7 +69,7 @@ class Eval(commands.Cog):
             view=view,
         )
 
-    @commands.Cog.listener(name="Eval listener")
+    @commands.Cog.listener()
     async def on_message_edit(
         self, before: discord.Message, after: discord.Message
     ) -> None:
