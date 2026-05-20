@@ -68,6 +68,7 @@ class Eval(commands.Cog):
             allowed_mentions=discord.AllowedMentions.none(),
             view=view,
         )
+        await ctx.message.add_reaction("\n{REPEAT}")
 
 
 def run_python(code: str) -> subprocess.CompletedProcess[str]:
