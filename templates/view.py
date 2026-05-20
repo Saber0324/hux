@@ -73,5 +73,6 @@ class CorrectUsageMenu(BaseView):
     ) -> None:
         await interaction.response.defer()
         await interaction.followup.send(
-            f"The correct usage for the language {select.values[0]} is:"
+            f"The correct usage for {select.values[0]} eval is:"
         )
+        self._disable_all()
