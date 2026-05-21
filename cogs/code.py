@@ -96,8 +96,7 @@ class Eval(commands.Cog):
         if user.bot:
             return
         if not (
-            user == reaction.message.author
-            and reaction.message.content.startswith("!e")
+            reaction.message.content.startswith("!e")
             and str(reaction.emoji) == "\U0001f501"
         ):
             return
