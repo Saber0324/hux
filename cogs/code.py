@@ -3,6 +3,7 @@ from discord.ext import commands
 import subprocess
 import asyncio
 import functools
+import re
 
 from typing import TYPE_CHECKING
 
@@ -102,10 +103,11 @@ class Eval(commands.Cog):
             return
 
         code = None
-        for prefix in ["!e ", "!eval "]:
-            if reaction.message.content.startswith(prefix):
-                code = reaction.message.content[len(prefix) :].strip()
-                break
+        match = re.match(r"^!(?:eval|e)\s+([\s\S]+)", reaction.message.content)
+        if match is None:
+            return
+
+        code = match.group(1).strip()
 
         if code is None:
             return
