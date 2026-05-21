@@ -1,8 +1,6 @@
 import traceback
 from typing import Self
-from asyncio.base_events import _interleave_addrinfos
 import discord
-from discord.ui import view
 from discord.ui.select import BaseSelect
 
 from templates.embeds import correctUsageEmbed
