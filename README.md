@@ -1,52 +1,56 @@
 <div align="center">
 
-# 🤖 HuxBot
+# HuxBot
 
 ![Python](https://img.shields.io/badge/Python_3.14-cba6f7?style=for-the-badge&logo=python&logoColor=1e1e2e)
 ![discord.py](https://img.shields.io/badge/discord.py-89b4fa?style=for-the-badge&logo=discord&logoColor=1e1e2e)
 ![License](https://img.shields.io/badge/license-MIT-f9e2af?style=for-the-badge&logoColor=1e1e2e)
 [![Discord](https://img.shields.io/badge/Hog_Projects-Discord-89b4fa?style=for-the-badge&logo=discord&logoColor=89b4fa&labelColor=1e1e2e)](https://discord.gg/B47Fut2sG4)
 
-*The official bot for the **Hog Projects** Discord server.*
+*The official bot for the **Hog jects** Discord server.*
 
 </div>
 
 ---
 
-## 📖 About
+## About
 
-HuxBot is a custom Discord bot built for the Hog Projects server. It handles moderation, server info, fun interactions, project tracking, and a persistent snippet system.
+HuxBot is a custom Discord bot built for the Hojects Discord server. It's main feature is being able to run code from a command. It can also handle basic moderation, information and has a basic snippet system.
 
 ---
 
-## ✨ Features
+## Features
 
-### 🛡️ Moderation
+### Moderation
 - Kick, timeout and untimeout members
 - Role management (`add` / `remove`)
 - Warning system
 
-### ℹ️ Info
+### Info
 - Server, user and role information via `!info`
 - Fast ping check
 
-### 🎉 Fun
+### Fun
 - Simple fun commands (`!hello`, `!meow`, `!hog`)
 
-### 📁 Projects
+### Projects
 - List active projects and their repositories
 - Fetch latest releases
 
-### 📝 Snippets
-A full persistent snippet system:
+### Snippets
 - Create, edit and delete snippets
 - Lock/unlock snippets to prevent modification
 - List all snippets or filter by author
 
+### Eval
+Run code from:
+ - Python
+ - Go
+ - Brainfuck
 
 ---
 
-## 🚀 Setup
+## Setup
 
 ### Prerequisites
 - Python 3.14+
@@ -61,7 +65,7 @@ cd projects-bot
 
 # Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt
@@ -75,9 +79,9 @@ python main.py
 
 ---
 
-## 📜 Commands
+## Commands
 
-### General
+### Information
 | Command | Description |
 |--------|-------------|
 | `!ping` | Check bot latency |
@@ -111,6 +115,12 @@ python main.py
 | `!projects list` | List all projects |
 | `!projects release <name>` | Get latest release link |
 
+### Eval
+| Command | Description |
+|--------|-------------|
+| `!eval` | Display correct usage information  |
+| `!eval <code>` | Runs the provided code and return the output |
+
 ### Snippets
 | Command | Alias | Description |
 |--------|-------|-------------|
@@ -123,34 +133,6 @@ python main.py
 | `!snippet list` | List all snippets |
 | `!snippet author @user` | List snippets by user |
 
----
-
-## 🗂️ Project Structure
-
-```
-projects-bot/
-├── main.py
-├── templates
-│   └── models.py
-├── data/
-│   ├── database.py
-│   └── bot.db
-└──cogs/
-    ├── info.py
-    ├── moderation.py
-    ├── fun.py
-    ├── projects.py
-    └── snippets.py 
-```
-
----
-
-## 🛠️ Tech Stack
-
-- **Runtime:** Python 3.14
-- **Bot Framework:** discord.py
-- **Database:** SQLite via aiosqlite
-- **Environment:** python-dotenv
 ---
 
 <div align="center">
