@@ -1,5 +1,4 @@
 import json
-from logging import WARNING
 
 from logging_manager import LOGFILE
 
