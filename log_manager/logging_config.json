@@ -1,0 +1,48 @@
+{
+ "version": 1,
+ "disable_existing_loggers": false,
+ "formatters": {
+  "simple": {
+   "format": "%(levelname)s %(asctime)s: %(message)s"
+  },
+  "detailed": {
+   "format": "[%(levelname)s | %(module)s | L%(lineno)d] %(asctime)s: %(message)s",
+   "datefmt": "%Y-%m-%dT%H:%M:%S%z"
+  }
+ },
+ "handlers": {
+  "stdout": {
+   "class": "logging.StreamHandler",
+   "formatter": "simple",
+   "stream": "ext://sys.stdout"
+  },
+  "stderr": {
+   "class": "logging.StreamHandler",
+   "formatter": "simple",
+   "stream": "ext://sys.stderr"
+  },
+  "file": {
+   "class": "logging.handlers.RotatingFileHandler",
+   "formatter": "detailed",
+   "filename": "logs/bot.log",
+   "maxBytes": 33554432,
+   "backupCount": 3
+  },
+  "queue_handler": {
+   "class": "logging.handlers.QueueHandler",
+   "handlers": [
+    "stderr",
+    "file"
+   ],
+   "respect_handler_level": true
+  }
+ },
+ "loggers": {
+  "root": {
+   "level": "DEBUG",
+   "handlers": [
+    "queue_handler"
+   ]
+  }
+ }
+}
