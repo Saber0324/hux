@@ -60,7 +60,7 @@ class BaseView(discord.ui.View):
 
 
 class CorrectUsageMenu(BaseView):
-    LANGS = ["Python", "Go", "Brainfuck"]
+    LANGS = ["Python", "Go", "Brainfuck", "Rust"]
 
     @discord.ui.select(
         cls=discord.ui.Select,
