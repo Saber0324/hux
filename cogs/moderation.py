@@ -78,30 +78,6 @@ class Moderation(commands.Cog):
     #     await user.ban(reason=reason)
     #     await ctx.send(f"{user.name} has been banned for {duration} days. Reason: {reason}")
 
-    @commands.group()
-    @commands.has_permissions(manage_roles=True)
-    async def role(self, ctx: commands.Context) -> None:
-        if ctx.invoked_subcommand is None:
-            await ctx.send(
-                "Correct usage: \n`!role add @member role` \n`!role remove @member role`"
-            )
-
-    @role.command()
-    async def add(
-        self, ctx: commands.Context, user: discord.Member, role: discord.Role
-    ) -> None:
-        logging.info(f"{ctx.author} has added role {role} to {user}")
-        await user.add_roles(role)
-        await ctx.send(f"The role {role.name} has been added to {user.name}.")
-
-    @role.command()
-    async def remove(
-        self, ctx: commands.Context, user: discord.Member, role: discord.Role
-    ) -> None:
-        logging.info(f"{ctx.author} has removed role {role} to {user}")
-        await user.remove_roles(role)
-        await ctx.send(f"The role {role.name} has been removed from {user.name}.")
-
 
 async def setup(bot: Hux) -> None:
     await bot.add_cog(Moderation(bot))
