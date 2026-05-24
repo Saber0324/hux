@@ -24,14 +24,9 @@ class Roles(commands.Cog):
         name="info", description="Displays information about a given role."
     )
     @app_commands.describe(role="Role which information will be displayed.")
-    async def role(
-        self, interaction: discord.Interaction, role: discord.Role | None = None
-    ) -> None:
-        if role is not None:
-            logger.info(f"{interaction.user} requested information about role {role}")
-            await interaction.response.send_message(embed=await embeds.roleEmbed(role))
-        else:
-            await interaction.response.send_message("Role not found.")
+    async def role(self, interaction: discord.Interaction, role: discord.Role) -> None:
+        logger.info(f"{interaction.user} requested information about role {role}")
+        await interaction.response.send_message(embed=await embeds.roleEmbed(role))
 
     @role_group.command(
         name="list", description="Shows a list all of the server's roles."
