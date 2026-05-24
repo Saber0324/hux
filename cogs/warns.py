@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import logging
 import discord
 from discord.ext import commands
 from templates.models import Warn
@@ -24,6 +25,7 @@ class Warns(commands.Cog):
             await ctx.send("`!help warn` for more information. ")
             return
         elif user:
+            logging.info(f"{ctx.author} has warned {user} for {reason}")
             await self.bot.db.insert(
                 "warns", (user.id, reason, moderator.id, current_date, None)
             )
@@ -46,9 +48,7 @@ class Warns(commands.Cog):
             return
         message = ""
         for warning in warning_list:
-            warn = Warn(
-                *warning
-            )  # Turns warn list into class instances for better readability
+            warn = Warn(*warning)
             message += f"_*Warn ID: {warn.warn_id}.*_ \n_*{warn.reason}*_ \nat {warn.date} \nBy {await self.bot.fetch_user(warn.moderator_id)}\n\n"
         embed = discord.Embed(title="Warning List", color=discord.Color.red())
         embed.set_thumbnail(url=user.display_avatar.url)
@@ -65,6 +65,7 @@ class Warns(commands.Cog):
             return
         warn = Warn(*result)
         await self.bot.db.delete("warns", "warn_id", warn_id)
+        logging.info(f"{ctx.author} has deleted warn id {warn.warn_id}")
         await ctx.send(
             f"Warning ID:{warn.warn_id} for {warn.reason} deleted from {await self.bot.fetch_user(warn.user_id)}"
         )
