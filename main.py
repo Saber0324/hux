@@ -21,6 +21,7 @@ COGS = [
     "cogs.warns",
     "cogs.testing",
     "cogs.code",
+    "cogs.roles",
 ]
 
 
