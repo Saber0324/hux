@@ -326,6 +326,7 @@ def run_rust(code: str) -> subprocess.CompletedProcess[str]:
             "100",
             "--cap-drop",
             "all",
+            "-i",
             "rust:alpine",
             "timeout",
             "45",
