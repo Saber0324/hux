@@ -200,6 +200,7 @@ def run_go(code: str) -> subprocess.CompletedProcess[str]:
             "--cpus=2",
             "--security-opt",
             "no-new-privileges",
+            "--read-only",
             "--tmpfs",
             "/tmp:size=200m,exec",
             "--tmpfs",
@@ -294,6 +295,51 @@ def run_bf(code: str, bfinput: str) -> subprocess.CompletedProcess[str]:
             break
     status.stdout = output
     return status
+
+
+def run_rust(code: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            "docker",
+            "run",
+            "--network",
+            "none",
+            "--rm",
+            "--memory=512m",
+            "--memory-swap=513m",
+            "--cpus=2",
+            "--security-opt",
+            "no-new-privileges",
+            "--read-only",
+            "--tmpfs",
+            "/tmp:size=200m,exec",
+            "--tmpfs",
+            "/dev/shm:size=10m,noexec,nosuid",
+            "--user",
+            "1000:1000",
+            "--pids-limit",
+            "100",
+            "--cap-drop",
+            "all",
+            "-e",
+            "HOME=/tmp",
+            "-e",
+            "GOCACHE=/tmp/go-cache",
+            "-e",
+            "GOPATH=/tmp/gopath",
+            "-i",
+            "golang:alpine",
+            "timeout",
+            "45",
+            "/bin/sh",
+            "-c",
+            "cat > /tmp/code.go && go run /tmp/code.go",
+        ],
+        input=code[6:-3],
+        capture_output=True,
+        text=True,
+        timeout=50,
+    )
 
 
 async def setup(bot: Hux) -> None:
