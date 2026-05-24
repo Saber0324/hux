@@ -20,8 +20,8 @@ async def userEmbed(user: discord.Member) -> discord.Embed:
     return embed
 
 
-async def serverEmbed(ctx: commands.Context) -> discord.Embed:
-    server = ctx.guild
+async def serverEmbed(interaction: discord.Interaction) -> discord.Embed:
+    server = interaction.guild
     if server is None:
         raise commands.NoPrivateMessage
     embed = discord.Embed(title="Server Information", color=discord.Color.blue())
@@ -45,14 +45,16 @@ async def roleEmbed(target: discord.Role) -> discord.Embed:
     return embed
 
 
-async def roleListEmbed(ctx: commands.Context) -> discord.Embed:
-    if ctx.guild is None:
+async def roleListEmbed(interaction: discord.Interaction) -> discord.Embed:
+    if interaction.guild is None:
         raise commands.NoPrivateMessage
     embed = discord.Embed(title="Role List", color=discord.Color.blue())
-    embed.set_thumbnail(url=ctx.guild.icon.url if ctx.guild.icon else None)
+    embed.set_thumbnail(
+        url=interaction.guild.icon.url if interaction.guild.icon else None
+    )
     embed.add_field(
         name="Roles",
-        value="\n".join([r.mention for r in ctx.guild.roles][1:][::-1]),
+        value="\n".join([r.mention for r in interaction.guild.roles][1:][::-1]),
         inline=False,
     )
     return embed
