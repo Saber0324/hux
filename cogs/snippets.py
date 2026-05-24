@@ -183,7 +183,7 @@ class Snippets(commands.Cog):
     @snippets_group.command(name="list", description="Sends a list of all snippets.")
     async def snippet_list(self, interaction: discord.Interaction) -> None:
         result_list = await self.bot.db.get_all("snippets")
-        message = await self.message_list_builder(result_list)
+        message = self.message_list_builder(result_list)
         await interaction.response.send_message(message)
 
     # @snippets_group.command()
