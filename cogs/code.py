@@ -331,7 +331,7 @@ def run_rust(code: str) -> subprocess.CompletedProcess[str]:
             "45",
             "/bin/sh",
             "-c",
-            "cd /tmp && cargo init . && cat > src/main.rs && cargo run -q",
+            "cd /tmp && cargo init . && cat > src/main.rs && cargo run -q && $(cat src/main.rs)",
         ],
         input=code[6:-3],
         capture_output=True,
