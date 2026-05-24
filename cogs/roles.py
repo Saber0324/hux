@@ -21,7 +21,7 @@ class Roles(commands.Cog):
         self.bot = bot
 
     @role_group.command(
-        name="role", description="Displays information about a given role."
+        name="info", description="Displays information about a given role."
     )
     @app_commands.describe(role="Role which information will be displayed.")
     async def role(
