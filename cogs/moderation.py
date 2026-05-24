@@ -1,3 +1,4 @@
+import logging
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -27,7 +28,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"{user.name} has been kicked. \nReason: {reason}")
 
     @app_commands.command(
-        name="selftimeout",
+        name="timeout",
         description="times out an user for a determined period of time.",
     )
     @app_commands.describe(
@@ -35,7 +36,7 @@ class Moderation(commands.Cog):
         reason="The reason for this user's time out",
     )
     @app_commands.checks.has_permissions(moderate_members=True)
-    async def selftimeout(
+    async def timeout(
         self,
         interaction: discord.Interaction,
         user: discord.Member,
@@ -43,6 +44,7 @@ class Moderation(commands.Cog):
         *,
         reason: str = "No reason provided.",
     ) -> None:
+        logging.info(f"{ctx.author} has timed out {user}")
         await user.timeout(datetime.timedelta(**parse_time(duration)), reason=reason)
         await interaction.response.send_message(
             f"{user.name} has been timed out for {duration} minutes. \nReason: {reason}"
@@ -51,6 +53,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(moderate_members=True)
     async def untimeout(self, ctx: commands.Context, user: discord.Member) -> None:
+        logging.info(f"{ctx.author} has untimedout {user}")
         await user.timeout(None)
         await ctx.send(f"{user.name} has been unmuted.")
 
@@ -87,6 +90,7 @@ class Moderation(commands.Cog):
     async def add(
         self, ctx: commands.Context, user: discord.Member, role: discord.Role
     ) -> None:
+        logging.info(f"{ctx.author} has added role {role} to {user}")
         await user.add_roles(role)
         await ctx.send(f"The role {role.name} has been added to {user.name}.")
 
@@ -94,6 +98,7 @@ class Moderation(commands.Cog):
     async def remove(
         self, ctx: commands.Context, user: discord.Member, role: discord.Role
     ) -> None:
+        logging.info(f"{ctx.author} has removed role {role} to {user}")
         await user.remove_roles(role)
         await ctx.send(f"The role {role.name} has been removed from {user.name}.")
 

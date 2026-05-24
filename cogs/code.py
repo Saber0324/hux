@@ -3,6 +3,7 @@ from discord.ext import commands
 import subprocess
 import asyncio
 import functools
+import logging
 from time import time as currenttime
 import re
 
@@ -12,6 +13,8 @@ from templates.view import BaseView, CorrectUsageMenu
 
 if TYPE_CHECKING:
     from main import Hux
+
+logger = logging.getLogger(__name__)
 
 
 class Eval(commands.Cog):
@@ -66,6 +69,9 @@ class Eval(commands.Cog):
     @commands.command(aliases=["e"])
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def eval(self, ctx: commands.Context, *, code: str | None = None) -> None:
+
+        logger.info(f"Eval | {ctx.author} | {code}")
+
         view = BaseView(ctx.author, timeout=30.0)
         delete_button = discord.ui.Button(
             label="Delete", style=discord.ButtonStyle.danger
@@ -116,11 +122,15 @@ class Eval(commands.Cog):
         code = None
         match = re.match(r"^!(?:eval|e)\s+([\s\S]+)", reaction.message.content)
         if match is None:
+            logger.error(
+                f"Eval re-run didn't find correct prefix | {reaction.message.content}"
+            )
             return
 
         code = match.group(1).strip()
 
         if code is None:
+            logger.error("Eval re-run code passed as None")
             return
 
         old_response = None
@@ -133,7 +143,7 @@ class Eval(commands.Cog):
 
         if old_response:
             message = self._format_output(output=output, return_code=return_code)
-
+            logger.info(f"Eval from {reaction.message.author} rerun sent succesfully")
             await old_response.edit(
                 content=message, allowed_mentions=discord.AllowedMentions.none()
             )

@@ -1,13 +1,14 @@
-import discord
-from discord.ext import commands
 import logging
 import os
 import asyncio
-import subprocess
 from dotenv import load_dotenv
-from data.database import Database
+from discord.ext import commands
+import discord
 
-handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
+from data.database import Database
+from log_manager.logging_manager import setup_loggin
+
+logger = logging.getLogger(__name__)
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
@@ -41,9 +42,10 @@ class Hux(commands.Bot):
         )
 
     async def on_ready(self) -> None:
-        print(f"{self.user} is ready and online!")
+        logger.info(f"{self.user} is ready and online!")
 
     async def setup_hook(self) -> None:
+        setup_loggin()
         self.db = Database("data/bot.db")
         await self.db.setup()
 
@@ -51,38 +53,44 @@ class Hux(commands.Bot):
             await self.load_extension(cog)
 
         synced = await self.tree.sync()
-        print(f"Synced {len(synced)} commands.")
+        logger.info(f"Synced {len(synced)} commands.")
 
     async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
-        if isinstance(error, commands.CommandInvokeError):
-            error = error.original
+        if ctx.command is not None:
+            command_name = ctx.command.name
+        else:
+            command_name = "Unkown command name"
 
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.send("You don't have permission to do this!")
-        elif isinstance(error, commands.MemberNotFound):
-            await ctx.send("User not found!")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(f"Missing argument: `{error.param.name}`")
-        elif isinstance(error, discord.Forbidden):
-            await ctx.send("I don't have permission to do that.")
-        elif isinstance(error, commands.BadArgument):
-            await ctx.send(
-                "Command has a bad argument. Check all parameter are correct."
-            )
-        elif isinstance(error, commands.NotOwner):
-            await ctx.send("Only Saber can access this command.")
-        elif isinstance(error, subprocess.TimeoutExpired):
-            await ctx.send("Subprocess timed out.")
-        elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send("The command is still in cooldown.")
-        elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.send("The comamnd can only be used on a server.")
-        elif isinstance(error, commands.CommandNotFound):
-            pass
+        logging.error(f"Error in command: {command_name}. {error}")
+
+        match error:
+            case commands.CommandInvokeError():
+                error = error.original
+            case commands.MissingPermissions():
+                await ctx.send("You don't have permission to do this!")
+            case commands.MemberNotFound():
+                await ctx.send("User not found.")
+            case commands.MissingRequiredArgument():
+                await ctx.send(f"Missing argument: `{error.param.name}`.")
+            case discord.Forbidden():
+                await ctx.send("I don't have permission to do that.")
+            case commands.BadArgument():
+                await ctx.send(
+                    f"The command {command_name} has a bad argument. Check correct usage."
+                )
+            case commands.NotOwner():
+                await ctx.send("Only the bot owner can access this command.")
+            case commands.CommandOnCooldown():
+                await ctx.send(f"The command {command_name}")
+            case commands.NoPrivateMessage():
+                await ctx.send(
+                    f"The command {command_name} can only be used in a server"
+                )
+            case commands.CommandNotFound():
+                pass
 
 
 async def main() -> None:
-    discord.utils.setup_logging(handler=handler, level=logging.DEBUG)
     token = str(os.getenv("TOKEN"))
     async with Hux("!") as hux:
         await hux.start(token)
