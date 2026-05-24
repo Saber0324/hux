@@ -47,7 +47,9 @@ class Warns(commands.Cog):
             else:
                 raise app_commands.MissingPermissions(["moderate_members"])
 
-    @warn_group.command(description="Displays a list of all warns given to an user.")
+    @warn_group.command(
+        name="list", description="Displays a list of all warns given to an user."
+    )
     @app_commands.describe(user="User to display warns from.")
     async def warn_list(
         self, interaction: discord.Interaction, user: discord.Member
