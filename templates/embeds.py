@@ -94,4 +94,16 @@ def correctUsageEmbed(language: str) -> discord.Embed:
             inline=False,
         )
 
+    elif language == "Rust":
+        embed.add_field(
+            name="\u200b",
+            value=r"\`\`\`rs" + "\ncode here \n" + r"\`\`\`",
+            inline=False,
+        )
+        embed.add_field(
+            name="Example",
+            value='```rs\nfn main()\n  println!("Hello, World!")\n```',
+            inline=False,
+        )
+
     return embed
