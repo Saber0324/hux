@@ -45,11 +45,18 @@ class Roles(commands.Cog):
         self, interaction: discord.Interaction, user: discord.Member, role: discord.Role
     ) -> None:
         if interaction.permissions.manage_roles:
-            logging.info(f"{interaction.user} has added role {role} to {user}")
-            await user.add_roles(role)
-            await interaction.response.send_message(
-                f"The role {role.name} has been added to {user.name}."
-            )
+            if role not in user.roles:
+                await user.add_roles(role)
+                logging.info(f"{interaction.user} has added role {role} to {user}")
+                await interaction.response.send_message(
+                    f"The role {role.mention} has been added to {user.mention}.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
+            else:
+                await interaction.response.send_message(
+                    f"{user.mention} already has the role {role.mention}",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
         else:
             raise app_commands.MissingPermissions(["manage_roles"])
 
@@ -62,11 +69,18 @@ class Roles(commands.Cog):
         self, interaction: discord.Interaction, user: discord.Member, role: discord.Role
     ) -> None:
         if interaction.permissions.manage_roles:
-            logging.info(f"{interaction.user} has removed role {role} to {user}")
-            await user.remove_roles(role)
-            await interaction.response.send_message(
-                f"The role {role.name} has been removed from {user.name}."
-            )
+            if role in user.roles:
+                await user.remove_roles(role)
+                logging.info(f"{interaction.user} has removed role {role} to {user}")
+                await interaction.response.send_message(
+                    f"The role {role.mention} has been removed from {user.mention}.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
+            else:
+                await interaction.response.send_message(
+                    f"{user.mention} didn't have the role {role.mention}.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
         else:
             raise app_commands.MissingPermissions(["manage_roles"])
 
