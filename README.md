@@ -47,6 +47,7 @@ Run code from:
  - Python
  - Go
  - Brainfuck
+ - Rust
 
 ---
 
