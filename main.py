@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 import asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -10,7 +11,7 @@ from log_manager.logging_manager import setup_loggin
 
 logger = logging.getLogger(__name__)
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+load_dotenv(Path(__file__) / ".env")
 
 COGS = [
     "cogs.info",
@@ -92,9 +93,12 @@ class Hux(commands.Bot):
 
 
 async def main() -> None:
-    token = str(os.getenv("TOKEN"))
-    async with Hux("!") as hux:
-        await hux.start(token)
+    token = os.getenv("TOKEN")
+    if token is not None:
+        async with Hux("!") as hux:
+            await hux.start(token)
+    else:
+        logger.error("TOKEN not found.")
 
 
 asyncio.run(main())
