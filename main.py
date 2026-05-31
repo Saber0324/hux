@@ -1,6 +1,7 @@
 import logging
 import os
 import asyncio
+import subprocess
 import discord
 from pathlib import Path
 from dotenv import load_dotenv
@@ -112,6 +113,8 @@ class Hux(commands.Bot):
                 await ctx.send("You're missing a role required to access this command.")
             case commands.CommandNotFound():
                 pass
+            case subprocess.TimeoutExpired():
+                await ctx.send("The command took too long to execute.")
             case _:
                 await ctx.send("An unexpected error ocurred")
                 logger.error(f"Unhandled exception: {error}")
