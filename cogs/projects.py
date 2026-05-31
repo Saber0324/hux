@@ -1,4 +1,5 @@
 import os
+import json
 import discord
 
 
@@ -8,6 +9,8 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 from aiohttp import ClientSession
+
+from templates.embeds import github_repo_embed
 
 if TYPE_CHECKING:
     from main import Hux
@@ -32,7 +35,15 @@ class Projects(commands.Cog):
     ) -> None:
         searched_item = Request(user, repository)
         data = await searched_item.get_data()
-        await interaction.response.send_message(str(data))
+        if repository is not None:
+            if data is not None:
+                embed = github_repo_embed(data)
+                await interaction.response.send_message(embed=embed)
+        else:
+            if data is not None:
+                await interaction.response.send_message(
+                    f"```json\n{json.dumps(data, indent=4)}\n```"
+                )
 
 
 class Request:
