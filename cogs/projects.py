@@ -78,20 +78,22 @@ class Request:
         if data is not None and "message" not in data:
             if "items" in data:
                 return {
-                    repo["name"]: {
-                        "created_at": repo["created_at"],
+                    repo["id"]: {
+                        "name": repo["name"],
                         "license_name": (repo["license"] or {}).get(
-                            "name", "No license"
+                            "name", "no license"
                         ),
                         "url": repo["html_url"],
                         "description": repo["description"] or "No description",
+                        "created_at": repo["created_at"],
+                        "owner_avatar": repo["owner"]["avatar_url"],
                     }
                     for repo in data["items"]
                 }
             else:
                 return {
                     "name": data["name"],
-                    "license_name": data["license"]["name"],
+                    "license_name": (data["license"] or {}).get("name", "no license"),
                     "url": data["html_url"],
                     "description": data["description"],
                     "created_at": data["created_at"],
