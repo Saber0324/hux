@@ -27,35 +27,42 @@ class Projects(commands.Cog):
         self.bot = bot
 
     @gh_group.command(
-        name="search", description="Search for a specified github user or repository"
+        name="repo", description="Search for a specified github repository"
     )
-    async def search(
-        self, interaction: discord.Interaction, user: str, repository: str | None = None
+    async def repo_search(
+        self,
+        interaction: discord.Interaction,
+        repository: str,
+        user: str | None = None,
     ) -> None:
-        searched_item = Request(user, repository)
-        data = await searched_item.get_data()
-        if repository is not None:
-            if data is not None:
-                embed = github_repo_embed(data)
-                await interaction.response.send_message(embed=embed)
+        searched_repo = Request(user, repository)
+        data = await searched_repo.get_data()
+        if data != "Not found":
+            if repository is not None:
+                if data is not None:
+                    embed = github_repo_embed(data)
+                    await interaction.response.send_message(embed=embed)
         else:
-            if data is not None:
-                embed = github_user_embed(data)
-                await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(
+                "The searched repository was not found."
+            )
 
 
 class Request:
-    def __init__(self, user: str, repo: str | None = None) -> None:
+    def __init__(self, user: str | None = None, repo: str | None = None) -> None:
         self.user = user
         self.repo = repo
         self.headers = {"Authorization": str(os.getenv("github_token"))}
 
     def get_url(self) -> str | None:
-        if not self.user:
-            print("User must be specified.")
+        if not self.repo:
+            print("Repository must be speficied.")
             return
         elif self.user and self.repo:
             url = f"https://api.github.com/repos/{self.user}/{self.repo}"
+            return url
+        elif self.repo:
+            url = f"https://api.github.com/search/repositories?q={self.repo}&sort=stars&order=desc"
             return url
         elif self.user:
             url = f"https://api.github.com/users/{self.user}"
@@ -106,6 +113,8 @@ class Request:
                     "created_at": data["created_at"],
                     "owner_avatar": data["owner"]["avatar_url"],
                 }
+        else:
+            return "Not found"
 
 
 async def setup(bot: Hux) -> None:
