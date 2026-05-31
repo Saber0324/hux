@@ -66,11 +66,12 @@ class Hux(commands.Bot):
         else:
             command_name = "Unkown command name"
 
-        logger.error(f"Error in command {command_name}. {error}")
+        logger.error(f"Error in app command {command_name}. {error}")
+
+        if isinstance(error, app_commands.CommandInvokeError):
+            error = error.original
 
         match error:
-            case app_commands.CommandInvokeError():
-                error = error.original
             case app_commands.MissingPermissions():
                 await interaction.response.send_message(
                     "You don't have permission to do this!"
@@ -100,7 +101,12 @@ class Hux(commands.Bot):
 
         logger.error(f"Error in command {command_name}. {error}")
 
+        if isinstance(error, commands.CommandInvokeError):
+            error = error.original
+
         match error:
+            case commands.CommandInvokeError():
+                error = error.original
             case commands.MissingAnyRole():
                 await ctx.send("You're missing a role required to access this command.")
 
