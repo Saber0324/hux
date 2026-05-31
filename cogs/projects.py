@@ -94,7 +94,7 @@ class Request:
                         "created_at": repo["created_at"],
                         "owner_avatar": repo["owner"]["avatar_url"],
                     }
-                    for repo in data["items"][0]
+                    for repo in data["items"]
                 }
             elif "bio" in data:
                 return {
