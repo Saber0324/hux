@@ -60,7 +60,7 @@ class Request:
             url = f"https://api.github.com/repos/{self.user}/{self.repo}"
             return url
         elif self.user:
-            url = f"https://api.github.com/search/repositories?q=user:{self.user}"
+            url = f"https://api.github.com/users/{self.user}"
             return url
 
     async def get_response(self, url):
@@ -75,6 +75,7 @@ class Request:
 
     async def get_data(self):
         data = await self.get_response(self.get_url())
+
         if data is not None and "message" not in data:
             if "items" in data:
                 return {
@@ -89,6 +90,14 @@ class Request:
                         "owner_avatar": repo["owner"]["avatar_url"],
                     }
                     for repo in data["items"]
+                }
+            elif "bio" in data:
+                return {
+                    "login": data["login"],
+                    "url": data["html_url"],
+                    "bio": data["bio"] or "No bio",
+                    "avatar": data["avatar_url"],
+                    "repos": data["public_repos"],
                 }
             else:
                 return {
