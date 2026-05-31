@@ -420,7 +420,7 @@ def run_cpp(code: str) -> subprocess.CompletedProcess[str]:
             "45",
             "/bin/sh",
             "-c",
-            "cd /tmp && cat > main.cpp && clang++ main.cpp -std=cpp23 -O2 -o main && ./main",
+            "cd /tmp && cat > main.cpp && clang++ main.cpp -std=c++23 -O2 -o main && ./main",
         ],
         input=code[7:-3],
         capture_output=True,
