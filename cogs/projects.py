@@ -68,7 +68,7 @@ class Request:
             url = f"https://api.github.com/repos/{self.user}/{self.repo}"
             return url
         elif self.repo:
-            url = f"https://api.github.com/search/repositories?q={self.repo}&sort=stars&order=desc"
+            url = f"https://api.github.com/search/repositories?q={self.repo}+in:name"
             return url
         elif self.user:
             url = f"https://api.github.com/users/{self.user}"
