@@ -48,6 +48,16 @@ class Projects(commands.Cog):
                 "The searched repository was not found."
             )
 
+    @gh_group.command(name="user", description="Search for a specific github user.")
+    async def user_search(self, interaction: discord.Interaction, user: str) -> None:
+        searched_user = Request(user=user)
+        data = await searched_user.get_data()
+        if data != "Not found":
+            embed = github_user_embed(data)
+            await interaction.response.send_message(embed=embed)
+        else:
+            await interaction.response.send_message("The searched user was not found.")
+
 
 class Request:
     def __init__(self, user: str | None = None, repo: str | None = None) -> None:
