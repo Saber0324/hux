@@ -101,7 +101,7 @@ class Pagination(BaseView):
             embed=self.embeds[self.index], view=self
         )
 
-    @discord.ui.button(style=discord.ButtonStyle.gray, label="close")
+    @discord.ui.button(style=discord.ButtonStyle.gray, label="Close")
     async def close(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.edit_message(view=None)
 
