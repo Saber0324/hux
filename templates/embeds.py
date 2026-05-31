@@ -120,7 +120,7 @@ def github_repo_embed(repo: dict):
             title=f"{repo['name']}",
             url=repo["url"],
             color=discord.Color.random(),
-            description=f"{repo['description']}\n\nCreated at t<:{date}:D>",
+            description=f"{repo['description']}\n\nCreated at <t:{date}:D>",
         )
         embed.set_thumbnail(url=repo["owner_avatar"])
         embed.set_footer(text=repo["license_name"])
