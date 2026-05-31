@@ -66,10 +66,7 @@ class Request:
         self.headers = {"Authorization": str(os.getenv("github_token"))}
 
     def get_url(self) -> str | None:
-        if not self.repo:
-            print("Repository must be speficied.")
-            return
-        elif self.user and self.repo:
+        if self.user and self.repo:
             url = f"https://api.github.com/repos/{self.user}/{self.repo}"
             return url
         elif self.repo:
