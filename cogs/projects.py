@@ -92,7 +92,7 @@ class Request:
                 return {
                     "name": data["name"],
                     "license_name": data["license"]["name"],
-                    "url": data["url"],
+                    "url": data["html_url"],
                     "description": data["description"],
                     "created_at": data["created_at"],
                     "owner_avatar": data["owner"]["avatar_url"],
