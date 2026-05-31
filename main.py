@@ -111,7 +111,7 @@ class Hux(commands.Bot):
             case commands.MissingAnyRole() | commands.MissingRole():
                 await ctx.send("You're missing a role required to access this command.")
             case commands.CommandNotFound():
-                logger.error(f"Command {command_name} not found")
+                pass
             case _:
                 await ctx.send("An unexpected error ocurred")
                 logger.error(f"Unhandled exception: {error}")
