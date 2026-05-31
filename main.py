@@ -103,7 +103,7 @@ class Hux(commands.Bot):
 
 
 async def main() -> None:
-    token = os.getenv("TOKEN")
+    token = str(os.getenv("TOKEN"))
     if token is not None:
         async with Hux("!") as hux:
             await hux.start(token)
