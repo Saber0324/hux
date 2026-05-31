@@ -91,6 +91,10 @@ class Hux(commands.Bot):
                 await interaction.response.send_message(
                     f"The command {command_name} was not found."
                 )
+            case commands.errors.MissingAnyRole():
+                await interaction.response.send_message(
+                    "You need a special role to do this."
+                )
 
 
 async def main() -> None:
