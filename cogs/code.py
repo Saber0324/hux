@@ -47,16 +47,6 @@ class Eval(commands.Cog):
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_rust, code)
             )
-        elif code.startswith("```cpp"):
-            loop = asyncio.get_event_loop()
-            docker_sub = await loop.run_in_executor(
-                None, functools.partial(run_cpp, code)
-            )
-        elif code.startswith("```c"):
-            loop = asyncio.get_event_loop()
-            docker_sub = await loop.run_in_executor(
-                None, functools.partial(run_c, code)
-            )
         else:
             return "Please, use proper formatting", 1
 
@@ -350,81 +340,6 @@ def run_rust(code: str) -> subprocess.CompletedProcess[str]:
         timeout=50,
     )
 
-def run_c(code: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [
-            "docker",
-            "run",
-            "--network",
-            "none",
-            "--rm",
-            "--memory=512m",
-            "--memory-swap=513m",
-            "--cpus=2",
-            "--security-opt",
-            "no-new-privileges",
-            "--read-only",
-            "--tmpfs",
-            "/tmp:size=200m,exec",
-            "--tmpfs",
-            "/dev/shm:size=10m,noexec,nosuid",
-            "--user",
-            "1000:1000",
-            "--pids-limit",
-            "100",
-            "--cap-drop",
-            "all",
-            "-i",
-            "clang-sandbox",
-            "timeout",
-            "45",
-            "/bin/sh",
-            "-c",
-            "cd /tmp && cat > main.c && clang main.c -std=c23 -O2 -o main && ./main",
-        ],
-        input=code[5:-3],
-        capture_output=True,
-        text=True,
-        timeout=50,
-    )
-
-def run_cpp(code: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [
-            "docker",
-            "run",
-            "--network",
-            "none",
-            "--rm",
-            "--memory=512m",
-            "--memory-swap=513m",
-            "--cpus=2",
-            "--security-opt",
-            "no-new-privileges",
-            "--read-only",
-            "--tmpfs",
-            "/tmp:size=200m,exec",
-            "--tmpfs",
-            "/dev/shm:size=10m,noexec,nosuid",
-            "--user",
-            "1000:1000",
-            "--pids-limit",
-            "100",
-            "--cap-drop",
-            "all",
-            "-i",
-            "clang-sandbox",
-            "timeout",
-            "45",
-            "/bin/sh",
-            "-c",
-            "cd /tmp && cat > main.cpp && clang++ main.cpp -std=cpp23 -O2 -o main && ./main",
-        ],
-        input=code[7:-3],
-        capture_output=True,
-        text=True,
-        timeout=50,
-    )
 
 async def setup(bot: Hux) -> None:
     await bot.add_cog(Eval(bot))
