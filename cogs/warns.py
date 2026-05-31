@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 import logging
 import discord
 from discord.ext import commands
+from discord import app_commands
 from templates.models import Warn
 
 from typing import TYPE_CHECKING
@@ -11,40 +12,53 @@ if TYPE_CHECKING:
 
 
 class Warns(commands.Cog):
+    warn_group = app_commands.Group(
+        name="warn", description="Commands used to manage warns."
+    )
+
     def __init__(self, bot: Hux):
         self.bot = bot
 
-    @commands.group(invoke_without_command=True, aliases=["w"])
-    @commands.has_permissions(moderate_members=True)
+    @warn_group.command(name="give", description="Warns an user.")
+    @app_commands.describe(user="User to be warned.", reason="Reason for the warn.")
     async def warn(
-        self, ctx, user: discord.Member | None = None, *, reason: str | None = None
+        self,
+        interaction: discord.Interaction,
+        user: discord.Member | None = None,
+        *,
+        reason: str | None = None,
     ) -> None:
         current_date = datetime.now(timezone.utc).strftime("%y-%m-%d")
-        moderator = ctx.author
-        if ctx.invoked_subcommand is None and user is None:
-            await ctx.send("`!help warn` for more information. ")
-            return
-        elif user:
-            logging.info(f"{ctx.author} has warned {user} for {reason}")
-            await self.bot.db.insert(
-                "warns", (user.id, reason, moderator.id, current_date, None)
-            )
-            embed = discord.Embed(title="_*Warning*_", color=discord.Color.red())
-            embed.set_thumbnail(
-                url="https://raw.githubusercontent.com/Saber0324/projects-bot/main/assets/warn.png?v=2"
-            )
-            embed.add_field(name="Reason", value=reason, inline=True)
-            embed.set_footer(text=f"Warned by {moderator.name} at {current_date}")
-            await ctx.send(embed=embed)
-            return
+        moderator = interaction.user
+        if user:
+            if interaction.permissions.moderate_members:
+                logging.info(f"{interaction.user} has warned {user} for {reason}")
+                await self.bot.db.insert(
+                    "warns", (user.id, reason, moderator.id, current_date, None)
+                )
+                embed = discord.Embed(title="_*Warning*_", color=discord.Color.red())
+                embed.set_thumbnail(
+                    url="https://raw.githubusercontent.com/Saber0324/projects-bot/main/assets/warn.png?v=2"
+                )
+                embed.add_field(name="Reason", value=reason, inline=True)
+                embed.set_footer(text=f"Warned by {moderator.name} at {current_date}")
+                await interaction.response.send_message(embed=embed)
+                return
+            else:
+                raise app_commands.MissingPermissions(["moderate_members"])
 
-    @warn.command(name="list", aliases=["l"])
-    async def warn_list(self, ctx: commands.Context, user: discord.Member) -> None:
-        warning_list = await self.bot.db.get_all_where(
-            "warns", "user_id", user.id
-        )  # Gets list of all warns filtered by user.
+    @warn_group.command(
+        name="list", description="Displays a list of all warns given to an user."
+    )
+    @app_commands.describe(user="User to display warns from.")
+    async def warn_list(
+        self, interaction: discord.Interaction, user: discord.Member
+    ) -> None:
+        warning_list = await self.bot.db.get_all_where("warns", "user_id", user.id)
         if not warning_list:
-            await ctx.send(f"{user.name} doesn't have any warns. ")
+            await interaction.response.send_message(
+                f"{user.name} doesn't have any warns. "
+            )
             return
         message = ""
         for warning in warning_list:
@@ -54,21 +68,25 @@ class Warns(commands.Cog):
         embed.set_thumbnail(url=user.display_avatar.url)
         embed.add_field(name="User", value=user.display_name, inline=False)
         embed.add_field(name="Warnings", value=message, inline=False)
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
-    @warn.command(aliases=["d"])
-    @commands.has_permissions(moderate_members=True)
-    async def delete(self, ctx: commands.Context, warn_id: int) -> None:
+    @warn_group.command(description="Deletes a warn by its id.")
+    @app_commands.describe(warn_id="ID of the warn to be deleted.")
+    async def delete(self, interaction: discord.Interaction, warn_id: int) -> None:
         result = await self.bot.db.get_one("warns", "warn_id", warn_id)
-        if result is None:
-            await ctx.send("This warning does not exist. ")
+        if result is not None:
+            if interaction.permissions.moderate_members:
+                warn = Warn(*result)
+                await self.bot.db.delete("warns", "warn_id", warn_id)
+                logging.info(f"{interaction.user} has deleted warn id {warn.warn_id}")
+                await interaction.response.send_message(
+                    f"Warning ID:{warn.warn_id} for {warn.reason} deleted from {await self.bot.fetch_user(warn.user_id)}"
+                )
+            else:
+                raise app_commands.MissingPermissions(["moderate_members"])
+        else:
+            await interaction.response.send_message("This warning does not exist. ")
             return
-        warn = Warn(*result)
-        await self.bot.db.delete("warns", "warn_id", warn_id)
-        logging.info(f"{ctx.author} has deleted warn id {warn.warn_id}")
-        await ctx.send(
-            f"Warning ID:{warn.warn_id} for {warn.reason} deleted from {await self.bot.fetch_user(warn.user_id)}"
-        )
 
 
 async def setup(bot: Hux) -> None:

@@ -1,3 +1,4 @@
+from datetime import datetime
 import discord
 from discord.ext import commands
 
@@ -20,8 +21,8 @@ async def userEmbed(user: discord.Member) -> discord.Embed:
     return embed
 
 
-async def serverEmbed(ctx: commands.Context) -> discord.Embed:
-    server = ctx.guild
+async def serverEmbed(interaction: discord.Interaction) -> discord.Embed:
+    server = interaction.guild
     if server is None:
         raise commands.NoPrivateMessage
     embed = discord.Embed(title="Server Information", color=discord.Color.blue())
@@ -45,14 +46,16 @@ async def roleEmbed(target: discord.Role) -> discord.Embed:
     return embed
 
 
-async def roleListEmbed(ctx: commands.Context) -> discord.Embed:
-    if ctx.guild is None:
+async def roleListEmbed(interaction: discord.Interaction) -> discord.Embed:
+    if interaction.guild is None:
         raise commands.NoPrivateMessage
     embed = discord.Embed(title="Role List", color=discord.Color.blue())
-    embed.set_thumbnail(url=ctx.guild.icon.url if ctx.guild.icon else None)
+    embed.set_thumbnail(
+        url=interaction.guild.icon.url if interaction.guild.icon else None
+    )
     embed.add_field(
         name="Roles",
-        value="\n".join([r.mention for r in ctx.guild.roles][1:][::-1]),
+        value="\n".join([r.mention for r in interaction.guild.roles][1:][::-1]),
         inline=False,
     )
     return embed
@@ -105,5 +108,33 @@ def correctUsageEmbed(language: str) -> discord.Embed:
             value='```rs\nfn main() {\n  println!("Hello, World!");\n}\n```',
             inline=False,
         )
-
     return embed
+
+
+def github_repo_embed(repo: dict):
+    if repo is not None:
+        date = int(
+            datetime.strptime(repo["created_at"], "%Y-%m-%dT%H:%M:%SZ").timestamp()
+        )
+        embed = discord.Embed(
+            title=f"{repo['name']}",
+            url=repo["url"],
+            color=discord.Color.random(),
+            description=f"{repo['description']}\n\nCreated at <t:{date}:D>",
+        )
+        embed.set_thumbnail(url=repo["owner_avatar"])
+        embed.set_footer(text=repo["license_name"])
+        return embed
+
+
+def github_user_embed(user: dict) -> discord.Embed:
+    if user is not None:
+        embed = discord.Embed(
+            title=user["login"],
+            url=user["url"],
+            description=user["bio"],
+            color=discord.Color.random(),
+        )
+        embed.set_thumbnail(url=user["avatar"])
+        embed.set_footer(text=f"Public repos: {user['repos']}")
+        return embed

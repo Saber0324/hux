@@ -12,26 +12,30 @@ class Fun(commands.Cog):
     def __init__(self, bot: Hux) -> None:
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_group(name="fun", fallback="get")
+    async def fun(self, ctx: commands.Context) -> None:
+        await ctx.send(f"{ctx.author} is " + random.choice(["fun.", "not fun."]))
+
+    @fun.command()
     async def hello(self, ctx: commands.Context) -> None:
         await ctx.send("Hello, sunshine.")
 
-    @commands.command()
+    @fun.command()
     async def meow(self, ctx: commands.Context) -> None:
         await ctx.send("Meow too!")
 
-    @commands.command()
+    @fun.command()
     async def fuck_off_iva(self, ctx: commands.Context) -> None:
         await ctx.send("FUCK OFF IVA")
 
-    @commands.command()
+    @fun.command()
     async def hog(self, ctx: commands.Context) -> None:
         await ctx.send("All hail the supreme leader")
 
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
+    @fun.command()
+    @commands.has_role(1508140013345575133)
     async def say(self, ctx: commands.Context, *, arg: str) -> None:
-        await ctx.send(arg)
+        await ctx.send(arg, allowed_mentions=discord.AllowedMentions.none())
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:

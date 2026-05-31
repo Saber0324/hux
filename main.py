@@ -1,16 +1,18 @@
 import logging
 import os
 import asyncio
+import discord
+from pathlib import Path
 from dotenv import load_dotenv
 from discord.ext import commands
-import discord
+from discord import app_commands
 
 from data.database import Database
 from log_manager.logging_manager import setup_loggin
 
 logger = logging.getLogger(__name__)
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+load_dotenv(Path(__file__).parent / ".env")
 
 COGS = [
     "cogs.info",
@@ -21,6 +23,7 @@ COGS = [
     "cogs.warns",
     "cogs.testing",
     "cogs.code",
+    "cogs.roles",
 ]
 
 
@@ -55,45 +58,72 @@ class Hux(commands.Bot):
         synced = await self.tree.sync()
         logger.info(f"Synced {len(synced)} commands.")
 
+    async def on_app_command_error(
+        self, interaction: discord.Interaction, error: Exception
+    ) -> None:
+        if interaction.command is not None:
+            command_name = interaction.command.name
+        else:
+            command_name = "Unknown command name"
+
+        logger.error(
+            f"Error in app command {command_name} invoked by {interaction.user}. {error}"
+        )
+
+        if isinstance(error, app_commands.CommandInvokeError):
+            error = error.original
+
+        match error:
+            case app_commands.MissingPermissions():
+                await interaction.followup.send("You don't have permission to do this!")
+            case discord.Forbidden():
+                await interaction.followup.send("I don't have permission to do that.")
+            case app_commands.CommandOnCooldown():
+                await interaction.followup.send(
+                    f"The command {command_name} is still on cooldown."
+                )
+            case app_commands.NoPrivateMessage():
+                await interaction.followup.send(
+                    f"The command {command_name} can only be used in a server"
+                )
+            case app_commands.CommandNotFound():
+                await interaction.followup.send(
+                    f"The command {command_name} was not found."
+                )
+            case _:
+                await interaction.followup.send("An unexpected error ocurred")
+                logger.error(f"Unhandled exception: {error}")
+
     async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
         if ctx.command is not None:
             command_name = ctx.command.name
         else:
-            command_name = "Unkown command name"
+            command_name = "Unknown command name"
 
-        logging.error(f"Error in command: {command_name}. {error}")
+        logger.error(
+            f"Error in command {command_name} invoked by user {ctx.author}. {error}"
+        )
+
+        if isinstance(error, commands.CommandInvokeError):
+            error = error.original
 
         match error:
-            case commands.CommandInvokeError():
-                error = error.original
-            case commands.MissingPermissions():
-                await ctx.send("You don't have permission to do this!")
-            case commands.MemberNotFound():
-                await ctx.send("User not found.")
-            case commands.MissingRequiredArgument():
-                await ctx.send(f"Missing argument: `{error.param.name}`.")
-            case discord.Forbidden():
-                await ctx.send("I don't have permission to do that.")
-            case commands.BadArgument():
-                await ctx.send(
-                    f"The command {command_name} has a bad argument. Check correct usage."
-                )
-            case commands.NotOwner():
-                await ctx.send("Only the bot owner can access this command.")
-            case commands.CommandOnCooldown():
-                await ctx.send(f"The command {command_name}")
-            case commands.NoPrivateMessage():
-                await ctx.send(
-                    f"The command {command_name} can only be used in a server"
-                )
+            case commands.MissingAnyRole() | commands.MissingRole():
+                await ctx.send("You're missing a role required to access this command.")
             case commands.CommandNotFound():
                 pass
+            case _:
+                await ctx.send("An unexpected error ocurred")
+                logger.error(f"Unhandled exception: {error}")
 
 
 async def main() -> None:
-    token = str(os.getenv("TOKEN"))
-    async with Hux("!") as hux:
-        await hux.start(token)
+    token = os.getenv("TOKEN")
+    if token is not None:
+        async with Hux("!") as hux:
+            await hux.start(token)
+    else:
+        logger.error("TOKEN not found.")
 
 
 asyncio.run(main())

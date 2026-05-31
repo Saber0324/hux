@@ -2,7 +2,6 @@ import traceback
 from typing import Self
 import discord
 from discord.ui.select import BaseSelect
-
 from templates.embeds import correctUsageEmbed
 
 
@@ -76,3 +75,40 @@ class CorrectUsageMenu(BaseView):
         await interaction.followup.send(embed=correctUsageEmbed(select.values[0]))
         self._disable_all()
         await self._edit(view=self)
+
+
+class Pagination(BaseView):
+    def __init__(
+        self, user: discord.User | discord.Member, embeds: list[discord.Embed]
+    ):
+        super().__init__(user=user)
+        self.embeds = embeds
+        self.index = 0
+        self.total_pages: int | None = None
+        self.update_buttons()
+
+    def update_buttons(self):
+        self.previous.disabled = self.index == 0
+        self.next.disabled = self.index == len(self.embeds) - 1
+
+    @discord.ui.button(style=discord.ButtonStyle.blurple, label="Previous")
+    async def previous(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
+        self.index -= 1
+        self.update_buttons()
+        await interaction.response.edit_message(
+            embed=self.embeds[self.index], view=self
+        )
+
+    @discord.ui.button(style=discord.ButtonStyle.gray, label="Close")
+    async def close(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.edit_message(view=None)
+
+    @discord.ui.button(style=discord.ButtonStyle.blurple, label="Next")
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.index += 1
+        self.update_buttons()
+        await interaction.response.edit_message(
+            embed=self.embeds[self.index], view=self
+        )
