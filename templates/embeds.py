@@ -113,7 +113,7 @@ def correctUsageEmbed(language: str) -> discord.Embed:
 def github_repo_embed(repo: dict):
     if repo is not None:
         embed = discord.Embed(
-            title=f"[{repo['name']}]",
+            title=f"{repo['name']}",
             url=repo["url"],
             color=discord.Color.random(),
             description=f"{repo['description']}\n{repo['license_name']}",
