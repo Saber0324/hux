@@ -47,15 +47,15 @@ class Eval(commands.Cog):
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_rust, code)
             )
-        elif code.startswith("```c"):
-            loop = asyncio.get_event_loop()
-            docker_sub = await loop.run_in_executor(
-                None, functools.partial(run_c, code)
-            )
         elif code.startswith("```cpp"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_cpp, code)
+            )
+        elif code.startswith("```c"):
+            loop = asyncio.get_event_loop()
+            docker_sub = await loop.run_in_executor(
+                None, functools.partial(run_c, code)
             )
         else:
             return "Please, use proper formatting", 1
@@ -350,6 +350,7 @@ def run_rust(code: str) -> subprocess.CompletedProcess[str]:
         timeout=50,
     )
 
+
 def run_c(code: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [
@@ -388,6 +389,7 @@ def run_c(code: str) -> subprocess.CompletedProcess[str]:
         timeout=50,
     )
 
+
 def run_cpp(code: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [
@@ -425,6 +427,7 @@ def run_cpp(code: str) -> subprocess.CompletedProcess[str]:
         text=True,
         timeout=50,
     )
+
 
 async def setup(bot: Hux) -> None:
     await bot.add_cog(Eval(bot))
