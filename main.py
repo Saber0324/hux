@@ -105,8 +105,6 @@ class Hux(commands.Bot):
             error = error.original
 
         match error:
-            case commands.CommandInvokeError():
-                error = error.original
             case commands.MissingAnyRole():
                 await ctx.send("You're missing a role required to access this command.")
 
