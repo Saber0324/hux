@@ -48,6 +48,8 @@ Run code from:
  - Go
  - Brainfuck
  - Rust
+ - C
+ - C++
 
 ---
 
