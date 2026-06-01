@@ -10,6 +10,10 @@ import re
 from typing import TYPE_CHECKING
 
 from templates.view import BaseView, CorrectUsageMenu
+from templates.parse import (
+    CODE_PATTERN,
+    extract_code,
+)
 
 if TYPE_CHECKING:
     from main import Hux
@@ -21,18 +25,18 @@ class Eval(commands.Cog):
     def __init__(self, bot: Hux):
         self.bot = bot
 
-    async def eval_logic(self, code: str) -> tuple[str, int]:
-        if code.startswith("```py"):
+    async def eval_logic(self, language: str, code: str) -> tuple[str, int]:
+        if language.lower() in ("python", "py"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_python, code)
             )
-        elif code.startswith("```go"):
+        elif language.lower() in ("golang", "go"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_go, code)
             )
-        elif code.startswith("```bf"):
+        elif language.lower() in ("bf", "brainfuck"):
             bfinput = code[code.find("\n```") + 4 :]
             if bfinput.startswith(" "):
                 bfinput = bfinput[1:]
@@ -42,17 +46,17 @@ class Eval(commands.Cog):
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_bf, code, bfinput)
             )
-        elif code.startswith("```rs"):
+        elif language.lower() in ("rs", "rust"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_rust, code)
             )
-        elif code.startswith("```cpp"):
+        elif language.lower() in ("cpp", "c++"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_cpp, code)
             )
-        elif code.startswith("```c"):
+        elif language.lower() == ("c"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_c, code)
@@ -104,7 +108,7 @@ class Eval(commands.Cog):
             view.message = await ctx.send(view=view)
             return
 
-        output, return_code = await self.eval_logic(code)
+        output, return_code = await self.eval_logic(*extract_code(CODE_PATTERN, code))
 
         message = self._format_output(output=output, return_code=return_code)
 
