@@ -105,7 +105,7 @@ class Eval(commands.Cog):
 
         if code is None:
             view = CorrectUsageMenu(ctx.author)
-            view.message = await ctx.send(view=view)
+            view.message = await ctx.send("Correct usage for:", view=view)
             return
 
         output, return_code = await self.eval_logic(*extract_code(CODE_PATTERN, code))
