@@ -1,4 +1,4 @@
-from hux.dataclasses import dataclass
+from dataclasses import dataclass
 import string
 
 
