@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from hux.dataclasses import dataclass
 import string
+
 
 @dataclass
 class Snippet:
@@ -16,6 +17,7 @@ class Warn:
     moderator_id: int
     date: str
     warn_id: int
+
 
 def parse_time(message: str):
     separated = [char for char in message]

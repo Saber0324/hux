@@ -9,7 +9,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 from aiohttp import ClientSession
 
-from templates.embeds import github_repo_embed, github_user_embed
+from hux.templates.embeds import github_repo_embed, github_user_embed
 
 if TYPE_CHECKING:
     from main import Hux

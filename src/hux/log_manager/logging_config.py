@@ -1,6 +1,6 @@
 import json
 
-from log_manager.logging_manager import LOG_FILE
+from hux.log_manager.logging_manager import LOG_FILE
 
 loggin_config = {
     "version": 1,

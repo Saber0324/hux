@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from discord import app_commands
 
-from data.database import Database
-from log_manager.logging_manager import setup_loggin
+from hux.data.database import Database
+from hux.log_manager.logging_manager import setup_loggin
 
 logger = logging.getLogger(__name__)
 

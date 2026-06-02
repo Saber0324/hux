@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from templates.models import Snippet
+from hux.templates.models import Snippet
 
 from typing import TYPE_CHECKING, Iterable
 

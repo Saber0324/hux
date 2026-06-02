@@ -9,8 +9,8 @@ import re
 
 from typing import TYPE_CHECKING
 
-from templates.view import BaseView, CorrectUsageMenu
-from templates.parse import (
+from hux.templates.view import BaseView, CorrectUsageMenu
+from hux.templates.parse import (
     CODE_PATTERN,
     extract_code,
 )

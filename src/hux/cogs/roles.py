@@ -4,7 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from typing import TYPE_CHECKING, cast
 
-from templates import embeds
+from hux.templates import embeds
 
 if TYPE_CHECKING:
     from main import Hux

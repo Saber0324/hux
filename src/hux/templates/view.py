@@ -2,7 +2,7 @@ import traceback
 from typing import Self
 import discord
 from discord.ui.select import BaseSelect
-from templates.embeds import correctUsageEmbed
+from hux.templates.embeds import correctUsageEmbed
 
 
 class BaseView(discord.ui.View):
