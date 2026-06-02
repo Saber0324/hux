@@ -91,10 +91,6 @@ class Hux(commands.Bot):
                 await send(f"The command {command_name} can only be used in a server")
             case app_commands.CommandNotFound():
                 await send(f"The command {command_name} was not found.")
-            case discord.Forbidden():
-                await send("The bot doesn't have permission to do this.")
-            case discord.errors.Forbidden():
-                await send("The bot doesn't have permission to do this.")
 
             case _:
                 await send("An unexpected error ocurred")
