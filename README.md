@@ -1,13 +1,13 @@
 <div align="center">
 
-# HuxBot
+# Hux
 
 ![Python](https://img.shields.io/badge/Python_3.14-cba6f7?style=for-the-badge&logo=python&logoColor=1e1e2e)
 ![discord.py](https://img.shields.io/badge/discord.py-89b4fa?style=for-the-badge&logo=discord&logoColor=1e1e2e)
 ![License](https://img.shields.io/badge/license-MIT-f9e2af?style=for-the-badge&logoColor=1e1e2e)
 [![Discord](https://img.shields.io/badge/Hog_Projects-Discord-89b4fa?style=for-the-badge&logo=discord&logoColor=89b4fa&labelColor=1e1e2e)](https://discord.gg/B47Fut2sG4)
 
-*The official bot for the **Hog jects** Discord server.*
+*The official bot for the **Hogjects** Discord server.*
 
 </div>
 
@@ -15,32 +15,25 @@
 
 ## About
 
-HuxBot is a custom Discord bot built for the Hojects Discord server. It's main feature is being able to run code from a command. It can also handle basic moderation, information and has a basic snippet system.
+Hux is a custom Discord bot built for the Hojects Discord server. It's main feature is being able to run code in a sandboxed environment.
 
 ---
 
 ## Features
 
-### Moderation
-- Kick, timeout and untimeout members
-- Role management (`add` / `remove`)
-- Warning system
-
 ### Info
-- Server, user and role information via `!info`
+- Server and user information via `/info`
 - Fast ping check
 
 ### Fun
-- Simple fun commands (`!hello`, `!meow`, `!hog`)
+- Simple fun commands (`/hello`, `/meow`, `/hog`)
 
-### Projects
-- List active projects and their repositories
-- Fetch latest releases
+### GitHub
+- Search users and repositories.
 
 ### Snippets
 - Create, edit and delete snippets
 - Lock/unlock snippets to prevent modification
-- List all snippets or filter by author
 
 ### Eval
 Run code from:
@@ -64,7 +57,7 @@ Run code from:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Saber0324/projects-bot
+git clone https://github.com/Saber0324/hux
 cd projects-bot
 
 # Create and activate virtual environment
@@ -88,36 +81,16 @@ python main.py
 ### Information
 | Command | Description |
 |--------|-------------|
-| `!ping` | Check bot latency |
-| `!info user @user` | Get user information |
-| `!info server` | Get server information |
-| `!info role @role` | Get role information |
-
-### Fun
-| Command | Description |
-|--------|-------------|
-| `!hello` | Say hello |
-| `!meow` | Meow back |
-| `!hog` | All hail |
-| `!say <text>` | Make the bot say something |
-
-### Moderation
-| Command | Description |
-|--------|-------------|
-| `!kick @user [reason]` | Kick a member |
-| `!timeout @user <minutes> [reason]` | Timeout a member |
-| `!untimeout @user` | Remove timeout |
-| `!role add @user role` | Add a role |
-| `!role remove @user role` | Remove a role |
-| `!warn @user`| Warns an user |
-| `!warn list @user` | Displays all warns from an user|
-| `!warn delete <warn id>` | Deletes a warn |
+| `/info ping` | Check bot latency |
+| `/info user @user` | Get user information |
+| `/info server` | Get server information |
+| `/role info @role` | Get role information |
 
 ### Projects
 | Command | Description |
 |--------|-------------|
-| `!projects list` | List all projects |
-| `!projects release <name>` | Get latest release link |
+| `/github user <name>` | Search for a github user |
+| `/github repo <name>` | Search for a github repository |
 
 ### Eval
 | Command | Description |
@@ -140,7 +113,5 @@ python main.py
 ---
 
 <div align="center">
-
-*Made with 🩷 for Hog Projects*
 
 </div>
