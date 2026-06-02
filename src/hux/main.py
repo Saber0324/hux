@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 
 COGS = [
-    "cogs.info",
-    "cogs.fun",
-    "cogs.projects",
-    "cogs.snippets",
-    "cogs.code",
-    "cogs.roles",
+    "hux.cogs.info",
+    "hux.cogs.fun",
+    "hux.cogs.projects",
+    "hux.cogs.snippets",
+    "hux.cogs.code",
+    "hux.cogs.roles",
 ]
 
 
