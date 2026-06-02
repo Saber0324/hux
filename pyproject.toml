@@ -11,5 +11,11 @@ dependencies = [
   "python-dotenv>=1.2.2",
 ]
 
+[project.scripts]
+hux = "hux.main:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.uv]
+package = true
