@@ -95,7 +95,7 @@ class Hux(commands.Bot):
                 await interaction.response.send_message(
                     "The bot doesn't have permission to do this."
                 )
-                case discord.error.Forbidden():
+            case discord.errors.Forbidden():
                 await interaction.response.send_message(
                     "The bot doesn't have permission to do this."
                 )
