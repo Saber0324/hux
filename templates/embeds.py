@@ -130,6 +130,18 @@ def correctUsageEmbed(language: str) -> discord.Embed:
             value='```cpp\n#include <iostream>\n\nint main(void) {\n  std::cout << "Hello, world!";\n}```',
             inline=False,
         )
+    elif language == "C#":
+        embed.add_field(
+            name="\u200b",
+            value=r"\`\`\`cs" + "\ncode here \n" + r"\`\`\`",
+            inline=False,
+        )
+        embed.add_field(
+            name="Example",
+            value='```cs\nConsole.WriteLine("Hello World!");```',
+            inline=False,
+        )
+
     return embed
 
 
