@@ -14,8 +14,8 @@ dependencies = [
 [project.scripts]
 hux = "hux.main:main"
 
-[tool.setuptools.package-dir]
-hux = "src"
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.uv]
 package = true
