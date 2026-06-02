@@ -472,7 +472,7 @@ def run_cs(code: str) -> subprocess.CompletedProcess[str]:
             "45",
             "/bin/sh",
             "-c",
-            "cd /tmp && dotnet new console --force --no-restore 2>/dev/null && cat > Program.cs && dotnet run --offline 2>&1 | grep -v 'verifying workloads'",
+            "cd /tmp && dotnet new console --force --no-restore -v q && cat > Program.cs && dotnet run --offline",
         ],
         input=code,
         capture_output=True,
