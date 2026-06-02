@@ -1,6 +1,6 @@
 import json
 
-from logging_manager import LOGFILE
+from log_manager.logging_manager import LOG_FILE
 
 loggin_config = {
     "version": 1,
@@ -28,7 +28,7 @@ loggin_config = {
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "detailed",
-            "filename": str(LOGFILE),
+            "filename": str(LOG_FILE),
             "maxBytes": 32 * 1024 * 1024,
             "backupCount": 3,
         },
