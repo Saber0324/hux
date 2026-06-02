@@ -2,7 +2,7 @@ import logging
 import discord
 from discord import app_commands
 from discord.ext import commands
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from templates import embeds
 
@@ -44,7 +44,8 @@ class Roles(commands.Cog):
     async def add(
         self, interaction: discord.Interaction, user: discord.Member, role: discord.Role
     ) -> None:
-        if interaction.permissions.manage_roles:
+        member = cast(discord.Member, interaction.user.id)
+        if interaction.permissions.manage_roles and member.top_role > role:
             if role not in user.roles:
                 await user.add_roles(role)
                 logging.info(f"{interaction.user} has added role {role} to {user}")
