@@ -14,7 +14,7 @@ from hux.templates.embeds import github_repo_embed, github_user_embed
 if TYPE_CHECKING:
     from main import Hux
 
-load_dotenv(Path(__file__).parent.parent.parent / ".env")
+load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
 
 
 class Projects(commands.Cog):
