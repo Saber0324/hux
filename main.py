@@ -17,12 +17,9 @@ load_dotenv(Path(__file__).parent / ".env")
 
 COGS = [
     "cogs.info",
-    "cogs.moderation",
     "cogs.fun",
     "cogs.projects",
     "cogs.snippets",
-    "cogs.warns",
-    "cogs.testing",
     "cogs.code",
     "cogs.roles",
 ]
