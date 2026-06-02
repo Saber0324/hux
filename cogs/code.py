@@ -56,6 +56,11 @@ class Eval(commands.Cog):
             docker_sub = await loop.run_in_executor(
                 None, functools.partial(run_cpp, code)
             )
+        elif language.lower() in ("cs", "c#"):
+            loop = asyncio.get_event_loop()
+            docker_sub = await loop.run_in_executor(
+                None, functools.partial(run_cs, code)
+            )
         elif language.lower() == ("c"):
             loop = asyncio.get_event_loop()
             docker_sub = await loop.run_in_executor(
@@ -425,6 +430,47 @@ def run_cpp(code: str) -> subprocess.CompletedProcess[str]:
             "/bin/sh",
             "-c",
             "cd /tmp && cat > main.cpp && clang++ main.cpp -std=c++23 -O2 -o main && ./main",
+        ],
+        input=code,
+        capture_output=True,
+        text=True,
+        timeout=50,
+    )
+
+
+def run_cs(code: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            "docker",
+            "run",
+            "--network",
+            "none",
+            "--rm",
+            "--memory=512m",
+            "--memory-swap=513m",
+            "--cpus=2",
+            "--security-opt",
+            "no-new-privileges",
+            "--read-only",
+            "--tmpfs",
+            "/tmp:size=200m,exec",
+            "--tmpfs",
+            "/dev/shm:size=10m,noexec,nosuid",
+            "--user",
+            "1000:1000",
+            "--pids-limit",
+            "100",
+            "--cap-drop",
+            "all",
+            "-i",
+            "-e", "DOTNET_CLI_HOME=/tmp",
+            "-e", "NUGET_PACKAGES=/tmp/.nuget",
+            "dotnet-sandbox",
+            "timeout",
+            "45",
+            "/bin/sh",
+            "-c",
+            "cd /tmp && dotnet new console --force --no-restore && cat > Program.cs && dotnet run --no-restore"
         ],
         input=code,
         capture_output=True,
