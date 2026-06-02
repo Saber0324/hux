@@ -79,7 +79,14 @@ class Eval(commands.Cog):
             output = f"{output[:500]} \n\nOutput limited to 500 characters."
 
         else:
-            output = output or "(No output)"
+            output = (
+                "\n".join(
+                    line
+                    for line in output.splitlines()
+                    if "An issue was encountered verifying workloads" not in line
+                )
+                or "(No output)"
+            )
 
         return output, return_code
 
