@@ -48,7 +48,7 @@ class Hux(commands.Bot):
     async def setup_hook(self) -> None:
         setup_loggin()
         self.tree.on_error = self.on_app_command_error
-        self.db = Database("data/bot.db")
+        self.db = Database("hux.data/bot.db")
         await self.db.setup()
 
         for cog in COGS:
