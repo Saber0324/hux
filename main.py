@@ -50,6 +50,7 @@ class Hux(commands.Bot):
 
     async def setup_hook(self) -> None:
         setup_loggin()
+        self.tree.on_error = self.on_app_command_error
         self.db = Database("data/bot.db")
         await self.db.setup()
 
@@ -93,7 +94,7 @@ class Hux(commands.Bot):
                 await send(f"The command {command_name} was not found.")
 
             case _:
-                await send("An unexpected error ocurred")
+                await send("An unexpected error occurred")
                 logger.error(f"Unhandled exception: {error}")
 
     async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
