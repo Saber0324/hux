@@ -71,37 +71,33 @@ class Hux(commands.Bot):
             f"Error in app command {command_name} invoked by {interaction.user}. {error}"
         )
 
+        async def send(msg: str):
+            if interaction.response.is_done():
+                await send(msg)
+            else:
+                await send(msg)
+
         if isinstance(error, app_commands.CommandInvokeError):
             error = error.original
 
         match error:
             case app_commands.MissingPermissions():
-                await interaction.followup.send("You don't have permission to do this!")
+                await send("You don't have permission to do this!")
             case discord.Forbidden():
-                await interaction.followup.send("I don't have permission to do that.")
+                await send("I don't have permission to do that.")
             case app_commands.CommandOnCooldown():
-                await interaction.followup.send(
-                    f"The command {command_name} is still on cooldown."
-                )
+                await send(f"The command {command_name} is still on cooldown.")
             case app_commands.NoPrivateMessage():
-                await interaction.followup.send(
-                    f"The command {command_name} can only be used in a server"
-                )
+                await send(f"The command {command_name} can only be used in a server")
             case app_commands.CommandNotFound():
-                await interaction.followup.send(
-                    f"The command {command_name} was not found."
-                )
+                await send(f"The command {command_name} was not found.")
             case discord.Forbidden():
-                await interaction.response.send_message(
-                    "The bot doesn't have permission to do this."
-                )
+                await send("The bot doesn't have permission to do this.")
             case discord.errors.Forbidden():
-                await interaction.response.send_message(
-                    "The bot doesn't have permission to do this."
-                )
+                await send("The bot doesn't have permission to do this.")
 
             case _:
-                await interaction.followup.send("An unexpected error ocurred")
+                await send("An unexpected error ocurred")
                 logger.error(f"Unhandled exception: {error}")
 
     async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
