@@ -1,6 +1,7 @@
 import json
 
 from hux.log_manager.logging_manager import LOG_FILE
+from hux.log_manager.logging_manager import CONFIG_JSON
 
 loggin_config = {
     "version": 1,
@@ -45,5 +46,5 @@ loggin_config = {
     },
 }
 
-with open("log_manager/logging_config.json", "w") as f:
+with open(CONFIG_JSON, "w") as f:
     json.dump(loggin_config, f, indent=True)

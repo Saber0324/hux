@@ -7,13 +7,13 @@ import atexit
 
 ROOT = pathlib.Path(__file__).parent.parent
 LOG_FILE = ROOT / "logs" / "bot.log"
-
+CONFIG_JSON = ROOT / "log_manager" / "logging_config.json"
 logger = logging.getLogger("cogs_logger")
 
 
 def setup_loggin():
     pathlib.Path(ROOT / "logs").mkdir(exist_ok=True)
-    log_config_file = pathlib.Path(ROOT / "log_manager" / "logging_config.json")
+    log_config_file = CONFIG_JSON
     with open(log_config_file) as f:
         config = json.load(f)
     logging.config.dictConfig(config)
