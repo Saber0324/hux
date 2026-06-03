@@ -1,5 +1,7 @@
-from discord.ext import commands
 import logging
+
+import discord
+from discord.ext import commands
 
 from typing import TYPE_CHECKING
 
@@ -28,8 +30,24 @@ class Testing(commands.Cog):
     @commands.command(name="replied")
     @commands.is_owner()
     async def reply(self, ctx: commands.Context, *, text: str) -> None:
-        message = await ctx.reply(f"{ctx.author.mention} has just said \n\n{text}")
-        logger.info(message)
+        self.reply_message = await ctx.reply("Placeholder")
+        logger.info(self.reply_message.id)
+
+    @commands.Cog.listener()
+    async def on_message_edit(
+        self, before: discord.Message, after: discord.Message
+    ) -> None:
+        logger.info(before.id, "was edited to", after.id)
+        await after.add_reaction("\U0001f501")
+
+    @commands.Cog.listener()
+    async def on_reaction_add(
+        self, reaction: discord.Reaction, user: discord.User | discord.Member
+    ) -> None:
+        if user.bot:
+            return
+        if reaction.emoji == "\U0001f501":
+            await reaction.message.reply(f"reacted message is: {self.reply_message.id}")
 
 
 async def setup(bot: Hux):
