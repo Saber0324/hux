@@ -52,26 +52,23 @@ Run code from:
 ### Prerequisites
 - Python 3.14+
 - A Discord bot token
+- uv
 
 ### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/Saber0324/hux
-cd projects-bot
-
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate.ps1
+cd hux
 
 # Install dependencies
-pip install -r requirements.txt
+uv sync
 
 # Create your .env file
 echo "TOKEN=your_token_here" > .env
 
 # Run the bot
-python main.py
+uv run hux
 ```
 
 ---
