@@ -25,6 +25,12 @@ class Testing(commands.Cog):
         logger.info(f"Left the server {guild.name} with id {guild.id}")
         await guild.leave()
 
+    @commands.command(name="replied")
+    @commands.is_owner()
+    async def reply(self, ctx: commands.Context, *, text: str) -> None:
+        message = await ctx.reply(f"{ctx.author.mention} has just said \n\n{text}")
+        logger.info(message)
+
 
 async def setup(bot: Hux):
     await bot.add_cog(Testing(bot))
