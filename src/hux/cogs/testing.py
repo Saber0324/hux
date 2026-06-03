@@ -37,7 +37,7 @@ class Testing(commands.Cog):
     async def on_message_edit(
         self, before: discord.Message, after: discord.Message
     ) -> None:
-        logger.info(before.id, "was edited to", after.id)
+        logger.info(f"{before.id} was edited to {after.id}")
         await after.add_reaction("\U0001f501")
 
     @commands.Cog.listener()
