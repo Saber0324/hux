@@ -38,7 +38,7 @@ class Testing(commands.Cog):
     async def on_message_edit(
         self, before: discord.Message, after: discord.Message
     ) -> None:
-        for _, user_message in self.eval_message_pairs:
+        for _, user_message in reversed(self.eval_message_pairs):
             if user_message.id == after.id:
                 await after.add_reaction("\U0001f501")
 
