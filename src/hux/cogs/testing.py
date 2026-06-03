@@ -15,11 +15,14 @@ class Testing(commands.Cog):
 
     @commands.command(name="leave_server")
     @commands.is_owner()
-    async def leave_server(self, ctx: commands.Context):
-        if ctx.guild is not None:
-            await ctx.send(f"Leaving server {ctx.guild.name}")
-            await ctx.guild.leave()
-            logger.info(f"Left the server {ctx.guild.name} with id **{ctx.guild.id}**")
+    async def leave_server(self, ctx: commands.Context, guild_id: int):
+        guild = ctx.guild if guild_id is None else self.bot.get_guild(guild_id)
+        if guild is None:
+            await ctx.send("Guild not found.")
+            return
+        await ctx.send(f"Leaving server **{guild.name}**")
+        logger.info(f"Left the server {guild.name} with id {guild.id}")
+        await guild.leave()
 
 
 async def setup(bot: Hux):
