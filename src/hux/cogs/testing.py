@@ -31,6 +31,7 @@ class Testing(commands.Cog):
     @commands.is_owner()
     async def reply(self, ctx: commands.Context, *, text: str) -> None:
         self.reply_message = await ctx.reply("Placeholder")
+        self.user_message = ctx.message
         logger.info(self.reply_message.id)
 
     @commands.Cog.listener()
@@ -47,7 +48,9 @@ class Testing(commands.Cog):
         if user.bot:
             return
         if reaction.emoji == "\U0001f501":
-            await reaction.message.reply(f"reacted message is: {self.reply_message.id}")
+            await reaction.message.reply(
+                f"reacted message is: {self.user_message.jump_url}\nbot's message is {self.reply_message.jump_url}"
+            )
 
 
 async def setup(bot: Hux):
