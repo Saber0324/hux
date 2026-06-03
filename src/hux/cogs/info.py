@@ -7,7 +7,7 @@ from hux.templates import embeds
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main import Hux
+    from hux.main import Hux
 
 logger = logging.getLogger(__name__)
 

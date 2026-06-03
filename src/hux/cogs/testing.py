@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from hux.templates.view import BaseView
 
 if TYPE_CHECKING:
-    from main import Hux
+    from hux.main import Hux
 
 
 class Testing(commands.Cog):
@@ -47,6 +47,12 @@ class Testing(commands.Cog):
 
         await interaction.response.send_message("Click me for an error.", view=view)
         view.message = await interaction.original_response()
+
+    @commands.command(name="leave_server")
+    @commands.is_owner()
+    async def leave_server(self, ctx: commands.Context):
+        if ctx.guild is not None:
+            await ctx.guild.leave()
 
 
 async def setup(bot: Hux):

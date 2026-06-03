@@ -6,7 +6,7 @@ from hux.templates.models import Snippet
 from typing import TYPE_CHECKING, Iterable
 
 if TYPE_CHECKING:
-    from main import Hux
+    from hux.main import Hux
 
 
 class Snippets(commands.Cog):
