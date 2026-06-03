@@ -39,7 +39,7 @@ class Testing(commands.Cog):
         self, before: discord.Message, after: discord.Message
     ) -> None:
         for _, user_message in self.eval_message_pairs:
-            if user_message.id == after.id:
+            if user_message.id == after.id and before.edited_at is None:
                 await after.add_reaction("\U0001f501")
 
     @commands.Cog.listener()
@@ -56,6 +56,8 @@ class Testing(commands.Cog):
                     f"bot's message is: {bot_reply.jump_url}"
                 )
                 await reaction.message.clear_reactions()
+                self.eval_message_pairs.remove((bot_reply, user_message))
+
                 break
 
 
