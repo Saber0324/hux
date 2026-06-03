@@ -148,9 +148,7 @@ class Eval(commands.Cog):
         if user.bot:
             return
 
-        code = None
-        bot_reply = None
-        user_message = None
+        code = bot_reply = user_message = None
         for bot_reply, user_message in reversed(self.eval_message_pairs):
             if reaction.emoji == "\U0001f501" and user.id == user_message.author.id:
                 match = re.match(r"^!(?:eval|e)\s+([\s\S]+)", reaction.message.content)
