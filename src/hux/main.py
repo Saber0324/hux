@@ -117,6 +117,10 @@ class Hux(commands.Bot):
                 await ctx.send("The command took too long to execute.")
             case commands.CommandOnCooldown():
                 await ctx.send("The command is still in cooldown.")
+            case commands.MissingRequiredArgument():
+                await ctx.send(
+                    "The comand has a missing argument, check correct usage."
+                )
             case _:
                 await ctx.send("An unexpected error ocurred")
                 logger.error(f"Unhandled exception: {error}")
