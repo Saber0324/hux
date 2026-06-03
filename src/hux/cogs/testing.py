@@ -17,6 +17,7 @@ class Testing(commands.Cog):
     @commands.is_owner()
     async def leave_server(self, ctx: commands.Context, guild_id: int):
         guild = ctx.guild if guild_id is None else self.bot.get_guild(guild_id)
+        logger.info(f"leave_server invoked by {ctx.author} in guild: {ctx.guild}")
         if guild is None:
             await ctx.send("Guild not found.")
             return
