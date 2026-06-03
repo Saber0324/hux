@@ -150,7 +150,11 @@ class Eval(commands.Cog):
 
         code = bot_reply = user_message = None
         for bot_reply, user_message in reversed(self.eval_message_pairs):
-            if reaction.emoji == "\U0001f501" and user.id == user_message.author.id:
+            if (
+                reaction.emoji == "\U0001f501"
+                and user.id == user_message.author.id
+                and reaction.count > 1
+            ):
                 match = re.match(r"^!(?:eval|e)\s+([\s\S]+)", reaction.message.content)
                 if match is None:
                     logger.error(
