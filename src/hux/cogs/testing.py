@@ -38,7 +38,7 @@ class Testing(commands.Cog):
     async def on_message_edit(
         self, before: discord.Message, after: discord.Message
     ) -> None:
-        for _, user_message in reversed(self.eval_message_pairs):
+        for _, user_message in self.eval_message_pairs:
             if user_message.id == after.id:
                 await after.add_reaction("\U0001f501")
 
@@ -49,7 +49,7 @@ class Testing(commands.Cog):
         if user.bot:
             return
 
-        for bot_reply, user_message in self.eval_message_pairs:
+        for bot_reply, user_message in reversed(self.eval_message_pairs):
             if reaction.emoji == "\U0001f501" and user.id == user_message.author.id:
                 await bot_reply.reply(
                     f"reacted message is: {user_message.jump_url}\n"
