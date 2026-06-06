@@ -23,6 +23,7 @@ COGS = [
     "hux.cogs.code",
     "hux.cogs.roles",
     "hux.cogs.testing",
+    "hux.cogs.code_snippets",
 ]
 
 
