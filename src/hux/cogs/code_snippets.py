@@ -80,14 +80,13 @@ class CodeSnippets(Cog):
     async def _fetch_response(self, url: str, response_format: str, **kwargs) -> Any:
         """Makes http requests using aiohttp."""
 
-        async with aiohttp.ClientSession().get(
-            url, raise_for_status=True, **kwargs
-        ) as response:
-            if response_format == "text":
-                return await response.text()
-            if response_format == "json":
-                return await response.json()
-            return None
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, raise_for_status=True, **kwargs) as response:
+                if response_format == "text":
+                    return await response.text()
+                if response_format == "json":
+                    return await response.json()
+                return None
 
     def _find_ref(self, path: str, refs: tuple) -> tuple:
         """Loops through all branches and tags to find the required ref."""
