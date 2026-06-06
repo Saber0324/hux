@@ -343,7 +343,8 @@ class CodeSnippets(Cog):
                 # Don't send snippets if the original message was deleted.
                 return
 
-        await message.channel.send(message_to_send)
+        if message_to_send:
+            await message.channel.send(message_to_send)
 
 
 async def setup(bot: Hux) -> None:
