@@ -1,3 +1,7 @@
+"""
+Based off of https://github.com/python-discord/bot/blob/main/bot/exts/info/code_snippets.py
+"""
+
 import logging
 import re
 import textwrap
