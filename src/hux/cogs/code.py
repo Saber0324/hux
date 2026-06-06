@@ -7,7 +7,7 @@ import logging
 from time import time as currenttime
 import re
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from hux.templates.view import BaseView, CorrectUsageMenu
 from hux.templates.parse import (
@@ -272,8 +272,8 @@ def run_bf(code: str, bfinput: str) -> subprocess.CompletedProcess[str]:
     dp = 0  # Data pointer
 
     stack = []  # Bracket nest stack
-    jump = [None] * len(code)  # Jump table
-    ip = 0  # Instruction pointer
+    jump: list[int | None] = [None] * len(code)  # Jump table
+    ip: int = 0  # Instruction pointer
     output = ""  # Output
     status = subprocess.CompletedProcess(bfinput, 0, "", "")
 
@@ -293,7 +293,7 @@ def run_bf(code: str, bfinput: str) -> subprocess.CompletedProcess[str]:
                     break
                 else:
                     jump[i] = stack.pop()
-                jump[jump[i]] = i
+                jump[cast(int, jump[i])] = i
 
     while ip < len(code) and status.returncode == 0:
         match code[ip]:
@@ -316,10 +316,10 @@ def run_bf(code: str, bfinput: str) -> subprocess.CompletedProcess[str]:
                 inputptr += 1
             case "[":
                 if not cells[dp]:
-                    ip = jump[ip]
+                    ip = cast(int, jump[ip])
             case "]":
                 if cells[dp]:
-                    ip = jump[ip]
+                    ip = cast(int, jump[ip])
                     continue
         ip += 1
         if currenttime() - starttime > 30:
