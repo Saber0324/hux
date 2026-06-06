@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 GITHUB_RE = re.compile(
     r"https://github\.com/(?P<repo>[a-zA-Z0-9-]+/[\w.-]+)/blob/"
@@ -87,7 +87,6 @@ class CodeSnippets(Cog):
                 return await response.text()
             if response_format == "json":
                 return await response.json()
-            print(response)
             return None
 
     def _find_ref(self, path: str, refs: tuple) -> tuple:
@@ -297,7 +296,7 @@ class CodeSnippets(Cog):
                 if normalized != unsanitized:
                     match = pattern.fullmatch(normalized)
                     if not match:
-                        logger.info(
+                        log.info(
                             "Received code snippet url %s which "
                             "attempted to circumvent url normalisation.",
                             unsanitized,
@@ -307,8 +306,8 @@ class CodeSnippets(Cog):
                     result = await handler(**match.groupdict())
                 except ClientResponseError as error:
                     error_message = error.message
-                    logger.log(
-                        loggerging.DEBUG if error.status == 404 else logging.ERROR,
+                    log.log(
+                        logging.DEBUG if error.status == 404 else logging.ERROR,
                         f"Failed to fetch code snippet from {match[0]!r}: {error.status} "
                         f"{error_message} for GET {error.request_info.real_url.human_repr()}",
                     )
