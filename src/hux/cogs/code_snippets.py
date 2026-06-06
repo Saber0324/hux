@@ -222,8 +222,8 @@ class CodeSnippets(Cog):
         self,
         file_contents: str,
         file_path: str,
-        start_line: str,
-        end_line: str | None,
+        start_line: str | int,
+        end_line: str | int | None,
         language: str | None = None,
     ) -> str:
         """
