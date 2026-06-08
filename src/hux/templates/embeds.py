@@ -62,22 +62,21 @@ async def roleListEmbed(interaction: discord.Interaction) -> discord.Embed:
 
 
 def correctUsageEmbed(language: str) -> discord.Embed:
+    description = ""
     embed = discord.Embed(
-        title=f"{language} correct usage", color=discord.Color.green()
+        title=f"{language} correct usage",
+        color=discord.Color.green(),
+        description=description,
     )
     if language == "Python":
+        description = "!e" + "\n" + r"\`\`\`py" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`py" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
+            name="Example", value='```py\nprint("Hello, World!") \n```', inline=False
         )
-        embed.add_field(name="Example", value='```py\nprint("Hello, World!") \n```')
 
     elif language == "Go":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`go" + "\npackage main \ncode here \n" + r"\`\`\`",
-            inline=False,
+        description = (
+            "!e" + "\n" + r"\`\`\`go" + "\npackage main \ncode here \n" + r"\`\`\`"
         )
         embed.add_field(
             name="Example",
@@ -86,11 +85,7 @@ def correctUsageEmbed(language: str) -> discord.Embed:
         )
 
     elif language == "Brainfuck":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`bf" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
-        )
+        description = "!e" + "\n" + r"\`\`\`bf" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
             name="Example",
             value="```bf\n++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.\n```",
@@ -98,44 +93,28 @@ def correctUsageEmbed(language: str) -> discord.Embed:
         )
 
     elif language == "Rust":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`rs" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
-        )
+        description = "!e" + "\n" + r"\`\`\`rs" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
             name="Example",
             value='```rs\nfn main() {\n  println!("Hello, World!");\n}\n```',
             inline=False,
         )
     elif language == "C":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`c" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
-        )
+        description = "!e" + "\n" + r"\`\`\`c" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
             name="Example",
             value='```c\n#include <stdio.h>\n\nint main(void) {\n    puts("Hello, world!");\n}```',
             inline=False,
         )
     elif language == "C++":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`cpp" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
-        )
+        description = "!e" + "\n" + r"\`\`\`cpp" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
             name="Example",
             value='```cpp\n#include <iostream>\n\nint main(void) {\n  std::cout << "Hello, world!";\n}```',
             inline=False,
         )
     elif language == "C#":
-        embed.add_field(
-            name="\u200b",
-            value=r"\`\`\`cs" + "\ncode here \n" + r"\`\`\`",
-            inline=False,
-        )
+        description = "!e" + "\n" + r"\`\`\`cs" + "\ncode here \n" + r"\`\`\`"
         embed.add_field(
             name="Example",
             value='```cs\nConsole.WriteLine("Hello World!");```',
